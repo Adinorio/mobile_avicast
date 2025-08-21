@@ -10,7 +10,73 @@ class AuthService {
   static const String _profileEndpoint = '/api/auth/profile/';
   static const Duration _timeout = Duration(seconds: 10);
 
+  // Default user credentials
+  static const String _defaultEmployeeId = 'admin';
+  static const String _defaultPassword = 'admin123';
+  static const String _defaultEmail = 'admin@avicast.com';
+
+  // Getters for default credentials (for display purposes)
+  static String get defaultEmployeeId => _defaultEmployeeId;
+  static String get defaultPassword => _defaultPassword;
+  static String get defaultEmail => _defaultEmail;
+
+  /// Check if a user is the default user
+  static bool isDefaultUser(String employeeId) {
+    return employeeId == _defaultEmployeeId;
+  }
+
   final LocalStorageService _localStorage = LocalStorageService();
+
+  /// Initialize default user for first-time setup
+  Future<void> initializeDefaultUser() async {
+    try {
+      // Check if default user already exists
+      final existingUser = await _localStorage.getStoredUser();
+      if (existingUser != null) return;
+
+      // Create default user
+      final defaultUser = User(
+        id: 1,
+        employeeId: _defaultEmployeeId,
+        username: _defaultEmployeeId,
+        email: _defaultEmail,
+        firstName: 'Admin',
+        lastName: 'User',
+        role: 'ADMIN',
+        isActive: true,
+        isStaff: true,
+        isSuperuser: true,
+        dateJoined: DateTime.now(),
+        lastLogin: null,
+      );
+
+      // Store the default user
+      await _localStorage.storeUser(defaultUser);
+
+      // Store the password hash for offline verification
+      final passwordHash = _hashPassword(_defaultPassword);
+      await _storePasswordHash(_defaultEmployeeId, passwordHash);
+
+      print('Default user initialized: $_defaultEmployeeId / $_defaultPassword');
+    } catch (e) {
+      print('Error initializing default user: $e');
+    }
+  }
+
+  /// Reset to default user (useful for testing)
+  Future<void> resetToDefaultUser() async {
+    try {
+      // Clear existing user data
+      await _localStorage.clearUserData();
+      
+      // Reinitialize default user
+      await initializeDefaultUser();
+      
+      print('Reset to default user completed');
+    } catch (e) {
+      print('Error resetting to default user: $e');
+    }
+  }
 
   /// Attempts to login to the Django backend
   Future<User?> login(String employeeId, String password) async {
@@ -65,6 +131,9 @@ class AuthService {
   /// Offline login using stored user data
   Future<User?> offlineLogin(String employeeId, String password) async {
     try {
+      // First, try to initialize default user if none exists
+      await initializeDefaultUser();
+      
       final storedUser = await _localStorage.getStoredUser();
       if (storedUser == null) return null;
 

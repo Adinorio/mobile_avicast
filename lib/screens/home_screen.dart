@@ -102,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildDashboardTab(),
           _buildDataTab(),
           _buildSyncTab(),
-          _buildSettingsTab(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -128,10 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.sync),
             label: 'Sync',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
+
         ],
       ),
     );
@@ -495,11 +491,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSettingsTab() {
-    return const Center(
-      child: Text('Settings - Coming Soon'),
-    );
-  }
+
 
   void _handleLogout() async {
     final authProvider = context.read<AuthProvider>();

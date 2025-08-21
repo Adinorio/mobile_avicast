@@ -23,7 +23,17 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> _initializeAuth() async {
+    await _initializeDefaultUser();
     await _loadStoredUser();
+  }
+
+  Future<void> _initializeDefaultUser() async {
+    try {
+      final authService = AuthService();
+      await authService.initializeDefaultUser();
+    } catch (e) {
+      debugPrint('Error initializing default user: $e');
+    }
   }
 
   Future<void> _loadStoredUser() async {
@@ -150,5 +160,24 @@ class AuthProvider extends ChangeNotifier {
 
   void clearError() {
     _clearError();
+  }
+
+  /// Reset to default user
+  Future<void> resetToDefaultUser() async {
+    try {
+      final authService = AuthService();
+      await authService.resetToDefaultUser();
+      
+      // Reload the stored user
+      await _loadStoredUser();
+    } catch (e) {
+      debugPrint('Error resetting to default user: $e');
+    }
+  }
+
+  /// Check if current user is the default user
+  bool get isDefaultUser {
+    if (_currentUser == null) return false;
+    return AuthService.isDefaultUser(_currentUser!.employeeId);
   }
 } 

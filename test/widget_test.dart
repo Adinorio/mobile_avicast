@@ -8,12 +8,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:mobile_avicast/main.dart';
+import 'package:mobile_avicast/app.dart';
 
 void main() {
   testWidgets('Avicast app smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const AvicastApp());
+    await tester.pumpWidget(const App());
 
     // Verify that our app loads without crashing
     expect(find.byType(MaterialApp), findsOneWidget);

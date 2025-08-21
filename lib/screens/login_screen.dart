@@ -4,6 +4,7 @@ import 'package:mobile_avicast/providers/auth_provider.dart';
 import 'package:mobile_avicast/providers/network_provider.dart';
 import 'package:mobile_avicast/screens/home_screen.dart';
 import 'package:mobile_avicast/utils/theme.dart';
+import 'package:mobile_avicast/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,11 +19,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isOfflineMode = false;
+  bool _showDefaultCredentials = false;
 
   @override
   void initState() {
     super.initState();
     _checkNetworkStatus();
+    _initializeDefaultUser();
   }
 
   void _checkNetworkStatus() {
@@ -32,6 +35,48 @@ class _LoginScreenState extends State<LoginScreen> {
         _isOfflineMode = !networkProvider.isLocalNetworkAvailable;
       });
     });
+  }
+
+  Future<void> _initializeDefaultUser() async {
+    final authService = AuthService();
+    await authService.initializeDefaultUser();
+  }
+
+  Widget _buildCredentialRow(String label, String value) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 80,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: AppTheme.textSecondaryColor,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppTheme.primaryColor.withOpacity(0.3)),
+            ),
+            child: Text(
+              value,
+              style: TextStyle(
+                color: AppTheme.textPrimaryColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'monospace',
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -271,6 +316,132 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     return const SizedBox.shrink();
                   },
+                ),
+                
+                const SizedBox(height: 24),
+                
+                // Default Credentials Section
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppTheme.primaryColor.withOpacity(0.3),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            color: AppTheme.primaryColor,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Default Login Credentials',
+                            style: TextStyle(
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            icon: Icon(
+                              _showDefaultCredentials 
+                                  ? Icons.visibility_off 
+                                  : Icons.visibility,
+                              color: AppTheme.primaryColor,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _showDefaultCredentials = !_showDefaultCredentials;
+                              });
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.input,
+                              color: AppTheme.primaryColor,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _employeeIdController.text = AuthService.defaultEmployeeId;
+                                _passwordController.text = AuthService.defaultPassword;
+                              });
+                            },
+                            tooltip: 'Fill with default credentials',
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.refresh,
+                              color: AppTheme.primaryColor,
+                              size: 20,
+                            ),
+                            onPressed: () async {
+                              final authProvider = context.read<AuthProvider>();
+                              await authProvider.resetToDefaultUser();
+                              setState(() {
+                                _employeeIdController.clear();
+                                _passwordController.clear();
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Reset to default user completed'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            tooltip: 'Reset to default user',
+                          ),
+                        ],
+                      ),
+                      if (_showDefaultCredentials) ...[
+                        const SizedBox(height: 12),
+                        _buildCredentialRow('Employee ID:', AuthService.defaultEmployeeId),
+                        const SizedBox(height: 8),
+                        _buildCredentialRow('Password:', AuthService.defaultPassword),
+                        const SizedBox(height: 8),
+                        _buildCredentialRow('Email:', AuthService.defaultEmail),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Use these credentials to log in for the first time',
+                          style: TextStyle(
+                            color: AppTheme.textSecondaryColor,
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.lightbulb_outline,
+                              color: AppTheme.warningColor,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                'Tip: Click the input button to auto-fill the form',
+                                style: TextStyle(
+                                  color: AppTheme.warningColor,
+                                  fontSize: 11,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
                 
                 const SizedBox(height: 24),
