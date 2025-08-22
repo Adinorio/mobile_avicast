@@ -7,6 +7,7 @@ import '../bloc/auth_state.dart';
 import '../../domain/entities/user.dart';
 import 'change_password_page.dart';
 
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -326,6 +327,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+
     );
   }
 } 

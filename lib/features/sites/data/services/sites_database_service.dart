@@ -42,7 +42,7 @@ class BirdCount {
   final String birdStatus;
   final int count;
   final DateTime timestamp;
-  final String observerName;
+  final String? observerName;
 
   BirdCount({
     required this.birdName,
@@ -51,7 +51,7 @@ class BirdCount {
     required this.birdStatus,
     required this.count,
     required this.timestamp,
-    required this.observerName,
+    this.observerName,
   });
 
   Map<String, dynamic> toJson() {

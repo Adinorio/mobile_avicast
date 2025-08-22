@@ -23,6 +23,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Spoon-billed Sandpiper',
       'status': 'CR',
       'statusText': 'Critically Endangered',
+      'statusDescription': 'Facing extremely high risk of extinction in the wild',
       'statusColor': Colors.red,
       'family': 'Scolopacidae',
       'scientificName': 'Calidris pygmaea',
@@ -32,6 +33,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Chinese Egret',
       'status': 'EN',
       'statusText': 'Endangered',
+      'statusDescription': 'Facing very high risk of extinction in the wild',
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Ardeidae',
       'scientificName': 'Egretta eulophotes',
@@ -41,6 +43,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Black-faced Spoonbill',
       'status': 'VU',
       'statusText': 'Vulnerable',
+      'statusDescription': 'Facing high risk of extinction in the wild',
       'statusColor': const Color(0xFFFFD700), // Gold/yellow
       'family': 'Threskiornithidae',
       'scientificName': 'Platalea minor',
@@ -50,6 +53,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': "Baer's Pochard",
       'status': 'CR',
       'statusText': 'Critically Endangered',
+      'statusDescription': 'Facing extremely high risk of extinction in the wild',
       'statusColor': Colors.red,
       'family': 'Anatidae',
       'scientificName': 'Aythya baeri',
@@ -59,6 +63,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Far Eastern Curlew',
       'status': 'EN',
       'statusText': 'Endangered',
+      'statusDescription': 'Facing very high risk of extinction in the wild',
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Scolopacidae',
       'scientificName': 'Numenius madagascariensis',
@@ -68,6 +73,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Whiskered Tern',
       'status': 'LC',
       'statusText': 'Least Concern',
+      'statusDescription': 'Widespread and abundant, not at risk',
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Laridae',
       'scientificName': 'Chlidonias hybrida',
@@ -77,6 +83,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Barn Swallow',
       'status': 'LC',
       'statusText': 'Least Concern',
+      'statusDescription': 'Widespread and abundant, not at risk',
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Hirundinidae',
       'scientificName': 'Hirundo rustica',
@@ -86,6 +93,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Peregrine Falcon',
       'status': 'LC',
       'statusText': 'Least Concern',
+      'statusDescription': 'Widespread and abundant, not at risk',
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Falconidae',
       'scientificName': 'Falco peregrinus',
@@ -95,6 +103,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Great Knot',
       'status': 'EN',
       'statusText': 'Endangered',
+      'statusDescription': 'Facing very high risk of extinction in the wild',
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Scolopacidae',
       'scientificName': 'Calidris tenuirostris',
@@ -104,6 +113,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Nordmann\'s Greenshank',
       'status': 'NT',
       'statusText': 'Near Threatened',
+      'statusDescription': 'Close to qualifying for threatened status',
       'statusColor': const Color(0xFFFFA500), // Orange
       'family': 'Scolopacidae',
       'scientificName': 'Tringa guttifer',
@@ -113,10 +123,51 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Common Redshank',
       'status': 'LC',
       'statusText': 'Least Concern',
+      'statusDescription': 'Widespread and abundant, not at risk',
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Scolopacidae',
       'scientificName': 'Tringa totanus',
       'image': 'assets/images/common_redshank.jpg',
+    },
+    {
+      'name': 'Saunders\'s Gull',
+      'status': 'VU',
+      'statusText': 'Vulnerable',
+      'statusDescription': 'Facing high risk of extinction in the wild',
+      'statusColor': const Color(0xFFFFD700), // Gold/yellow
+      'family': 'Laridae',
+      'scientificName': 'Saundersilarus saundersi',
+      'image': 'assets/images/saunders_gull.jpg',
+    },
+    {
+      'name': 'Oriental Stork',
+      'status': 'EN',
+      'statusText': 'Endangered',
+      'statusDescription': 'Facing very high risk of extinction in the wild',
+      'statusColor': const Color(0xFFFF8C00), // Dark orange
+      'family': 'Ciconiidae',
+      'scientificName': 'Ciconia boyciana',
+      'image': 'assets/images/oriental_stork.jpg',
+    },
+    {
+      'name': 'Red-crowned Crane',
+      'status': 'VU',
+      'statusText': 'Vulnerable',
+      'statusDescription': 'Facing high risk of extinction in the wild',
+      'statusColor': const Color(0xFFFFD700), // Gold/yellow
+      'family': 'Gruidae',
+      'scientificName': 'Grus japonensis',
+      'image': 'assets/images/red_crowned_crane.jpg',
+    },
+    {
+      'name': 'Chinese Crested Tern',
+      'status': 'DD',
+      'statusText': 'Data Deficient',
+      'statusDescription': 'Insufficient data to assess conservation status',
+      'statusColor': Colors.grey,
+      'family': 'Laridae',
+      'scientificName': 'Thalasseus bernsteini',
+      'image': 'assets/images/chinese_crested_tern.jpg',
     },
   ];
 
@@ -135,17 +186,140 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
         filtered.sort((a, b) => a['family'].compareTo(b['family']));
         break;
       case 'IUCN Status':
-        // Sort by IUCN status priority: CR > EN > VU > NT > LC
-        final statusPriority = {'CR': 1, 'EN': 2, 'VU': 3, 'NT': 4, 'LC': 5};
+        // Sort by IUCN status priority: CR > EN > VU > NT > LC > DD
+        final statusPriority = {'CR': 1, 'EN': 2, 'VU': 3, 'NT': 4, 'LC': 5, 'DD': 6};
         filtered.sort((a, b) {
-          final aPriority = statusPriority[a['status']] ?? 6;
-          final bPriority = statusPriority[b['status']] ?? 6;
+          final aPriority = statusPriority[a['status']] ?? 7;
+          final bPriority = statusPriority[b['status']] ?? 7;
           return aPriority.compareTo(bPriority);
         });
         break;
     }
     
     return filtered;
+  }
+
+  void _showIUCNStatusInfo(Map<String, dynamic> bird) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: bird['statusColor'],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  bird['status'],
+                  style: TextStyle(
+                    color: bird['status'] == 'VU' || bird['status'] == 'LC' 
+                        ? Colors.black 
+                        : Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                bird['statusText'],
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                bird['statusDescription'],
+                style: const TextStyle(
+                  fontSize: 16,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'IUCN Red List Categories:',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildIUCNCategoryInfo('CR', 'Critically Endangered', Colors.red, 'Facing extremely high risk of extinction'),
+              _buildIUCNCategoryInfo('EN', 'Endangered', const Color(0xFFFF8C00), 'Facing very high risk of extinction'),
+              _buildIUCNCategoryInfo('VU', 'Vulnerable', const Color(0xFFFFD700), 'Facing high risk of extinction'),
+              _buildIUCNCategoryInfo('NT', 'Near Threatened', const Color(0xFFFFA500), 'Close to qualifying for threatened status'),
+              _buildIUCNCategoryInfo('LC', 'Least Concern', const Color(0xFF90EE90), 'Widespread and abundant, not at risk'),
+              _buildIUCNCategoryInfo('DD', 'Data Deficient', Colors.grey, 'Insufficient data to assess conservation status'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildIUCNCategoryInfo(String code, String name, Color color, String description) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Center(
+                              child: Text(
+                  code,
+                  style: TextStyle(
+                    color: code == 'VU' || code == 'LC' || code == 'DD' ? Colors.black : Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showSortOptions() {
@@ -340,22 +514,54 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: bird['statusColor'],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              bird['status'],
-                              style: TextStyle(
-                                color: bird['status'] == 'VU' || bird['status'] == 'LC' 
-                                    ? Colors.black 
-                                    : Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Status code badge
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: bird['statusColor'],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  bird['status'],
+                                  style: TextStyle(
+                                    color: bird['status'] == 'VU' || bird['status'] == 'LC' || bird['status'] == 'DD'
+                                        ? Colors.black 
+                                        : Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: 4),
+                              // Full status description with tooltip
+                              GestureDetector(
+                                onTap: () => _showIUCNStatusInfo(bird),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      bird['statusText'],
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(
+                                      Icons.info_outline,
+                                      size: 12,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -447,13 +653,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                 size: 28,
               ),
               onPressed: () {
-                // TODO: Implement camera functionality
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Camera feature coming soon!'),
-                    backgroundColor: Color(0xFF667eea),
-                  ),
-                );
+                Navigator.of(context).pushNamed('/camera');
               },
             ),
           ],

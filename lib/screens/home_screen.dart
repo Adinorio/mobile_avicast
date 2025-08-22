@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_avicast/providers/auth_provider.dart';
-import 'package:mobile_avicast/providers/network_provider.dart';
 import 'package:mobile_avicast/providers/sync_provider.dart';
+import 'package:mobile_avicast/providers/network_provider.dart';
 import 'package:mobile_avicast/utils/theme.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
