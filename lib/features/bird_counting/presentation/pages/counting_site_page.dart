@@ -30,13 +30,7 @@ class SiteSelectionView extends StatefulWidget {
 
 class _SiteSelectionViewState extends State<SiteSelectionView> {
   String? _selectedSite;
-  final List<String> _availableSites = [
-    'Central Park Bird Sanctuary',
-    'Riverside Wetlands',
-    'Mountain Forest Reserve',
-    'Coastal Bird Colony',
-    'Urban Garden Habitat',
-  ];
+  final List<String> _availableSites = [];
 
   void _selectSite(String site) {
     setState(() {
@@ -122,70 +116,118 @@ class _SiteSelectionViewState extends State<SiteSelectionView> {
               
               // Site list
               Expanded(
-                child: ListView.builder(
-                  itemCount: _availableSites.length,
-                  itemBuilder: (context, index) {
-                    final site = _availableSites[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      color: Colors.white,
-                      elevation: 2,
+                child: _availableSites.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.location_off,
+                              size: 80,
+                              color: Colors.grey[400],
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'No Counting Sites Available',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'You haven\'t added any counting sites yet.\nTap the button below to add your first site.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[500],
+                                height: 1.4,
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            ElevatedButton.icon(
+                              onPressed: _showAddSiteDialog,
+                              icon: const Icon(Icons.add_location),
+                              label: const Text('Add First Site'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF4CAF50),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: _availableSites.length,
+                        itemBuilder: (context, index) {
+                          final site = _availableSites[index];
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            color: Colors.white,
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: const Color(0xFF4CAF50),
+                                child: Icon(
+                                  Icons.nature_people,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              title: Text(
+                                site,
+                                style: const TextStyle(
+                                  color: Color(0xFF2C3E50),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Tap to start counting',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 12,
+                                ),
+                              ),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color(0xFF2C3E50),
+                                size: 16,
+                              ),
+                              onTap: () => _selectSite(site),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+              
+              // Add new site button (only show when there are existing sites)
+              if (_availableSites.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _showAddSiteDialog,
+                    icon: const Icon(Icons.add_location),
+                    label: const Text('Add New Site'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4CAF50),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: const Color(0xFF4CAF50),
-                          child: Icon(
-                            Icons.nature_people,
-                            color: Colors.white,
-                          ),
-                        ),
-                        title: Text(
-                          site,
-                          style: const TextStyle(
-                            color: Color(0xFF2C3E50),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        subtitle: Text(
-                          'Tap to start counting',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Color(0xFF2C3E50),
-                          size: 16,
-                        ),
-                        onTap: () => _selectSite(site),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              // Add new site button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _showAddSiteDialog,
-                  icon: const Icon(Icons.add_location),
-                  label: const Text('Add New Site'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
-              ),
+              ],
             ],
           ),
         ),

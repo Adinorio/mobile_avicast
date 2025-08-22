@@ -266,8 +266,21 @@ class _SitesPageState extends State<SitesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF87CEEB), // Light blue
+              Color(0xFFB0E0E6), // Powder blue
+              Colors.white,
+            ],
+            stops: [0.0, 0.6, 1.0],
+          ),
+        ),
+        child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -460,6 +473,7 @@ class _SitesPageState extends State<SitesPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
 

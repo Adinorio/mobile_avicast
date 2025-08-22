@@ -28,6 +28,7 @@ dependencies:
   
   # Local Storage & Database
   sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.2
   path: ^1.8.3
   shared_preferences: ^2.2.2
   
@@ -52,18 +53,6 @@ dependencies:
   
   # Network Discovery (for local WiFi)
   network_info_plus: ^4.1.0
-  
-  # Camera & Location
-  camera: ^0.10.5+5
-  geolocator: ^10.1.0
-  geocoding: ^2.1.1
-  
-  # Local Storage
-  path_provider: ^2.1.1
-  
-
-  
-
 
 dev_dependencies:
   flutter_test:

@@ -16,31 +16,22 @@ class _LoginPageState extends State<LoginPage> {
   final _userIdController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
-  bool _isSignUp = false;
-  final _nameController = TextEditingController();
+
+
 
   @override
   void dispose() {
     _userIdController.dispose();
     _passwordController.dispose();
-    _nameController.dispose();
     super.dispose();
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      if (_isSignUp) {
-        context.read<AuthBloc>().add(SignUpRequested(
-          userId: _userIdController.text.trim(),
-          password: _passwordController.text,
-          name: _nameController.text.trim(),
-        ));
-      } else {
-        context.read<AuthBloc>().add(SignInRequested(
-          userId: _userIdController.text.trim(),
-          password: _passwordController.text,
-        ));
-      }
+      context.read<AuthBloc>().add(SignInRequested(
+        userId: _userIdController.text.trim(),
+        password: _passwordController.text,
+      ));
     }
   }
 
@@ -64,12 +55,14 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF667eea),
-                Color(0xFF764ba2),
+                Color(0xFF87CEEB), // Light blue
+                Color(0xFFB0E0E6), // Powder blue
+                Colors.white,
               ],
+              stops: [0.0, 0.6, 1.0],
             ),
           ),
           child: SafeArea(
@@ -96,45 +89,24 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            _isSignUp ? 'Create Account' : 'Welcome Back',
+                            'Welcome Back',
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
+                              color: const Color(0xFF2C3E50), // Dark blue like splash screen
                               fontSize: 24,
                             ),
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            _isSignUp 
-                                ? 'Join us to start bird counting'
-                                : 'Sign in to continue',
+                            'Sign in to continue',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
+                              color: const Color(0xFF7F8C8D), // Same color as splash screen subtitle
                               fontSize: 16,
                             ),
                           ),
                           const SizedBox(height: 32),
 
-                          // Name field (only for sign up)
-                          if (_isSignUp) ...[
-                            TextFormField(
-                              controller: _nameController,
-                              decoration: InputDecoration(
-                                labelText: 'Full Name',
-                                prefixIcon: const Icon(Icons.person),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Please enter your name';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                          ],
+
 
                           // User ID field
                           TextFormField(
@@ -192,26 +164,24 @@ class _LoginPageState extends State<LoginPage> {
                           
                           const SizedBox(height: 8),
 
-                          // Forgot password (only for sign in)
-                          if (!_isSignUp) ...[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    // TODO: Navigate to forgot password page
-                                  },
+                          // Forgot password
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  // TODO: Navigate to forgot password page
+                                },
                                   child: Text(
                                     'Forgot Password?',
                                     style: TextStyle(
-                                      color: Colors.grey[600],
+                                      color: const Color(0xFF7F8C8D), // Same color as splash screen subtitle
                                       fontSize: 14,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ],
                           const SizedBox(height: 32),
 
                           // Submit button
@@ -223,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: ElevatedButton(
                                   onPressed: state is AuthLoading ? null : _submitForm,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(context).primaryColor,
+                                    backgroundColor: const Color(0xFF00897B), // Teal from splash screen
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -231,9 +201,9 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   child: state is AuthLoading
                                       ? const CircularProgressIndicator(color: Colors.white)
-                                      : Text(
-                                          _isSignUp ? 'Sign Up' : 'Sign In',
-                                          style: const TextStyle(fontSize: 16),
+                                      : const Text(
+                                          'Sign In',
+                                          style: TextStyle(fontSize: 16),
                                         ),
                                 ),
                               );
@@ -241,24 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 20),
 
-                          // Toggle between sign in and sign up
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isSignUp = !_isSignUp;
-                                _formKey.currentState?.reset();
-                              });
-                            },
-                            child: Text(
-                              _isSignUp 
-                                  ? 'Already have an account? Sign In'
-                                  : 'Don\'t have an account? Sign Up',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 14,
-                                   ),
-                             ),
-                           ),
+
                         ],
                       ),
                     ),

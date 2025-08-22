@@ -334,8 +334,21 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF87CEEB), // Light blue
+              Color(0xFFB0E0E6), // Powder blue
+              Colors.white,
+            ],
+            stops: [0.0, 0.6, 1.0],
+          ),
+        ),
+        child: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -833,6 +846,7 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
               ],
             ),
           ),
+        ),
         ),
       ),
       bottomNavigationBar: Container(

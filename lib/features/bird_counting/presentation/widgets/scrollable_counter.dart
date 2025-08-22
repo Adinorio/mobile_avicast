@@ -128,13 +128,33 @@ class _ScrollableCounterState extends State<ScrollableCounter> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFE3F2FD), // Light blue
+            Color(0xFFF3E5F5), // Light purple
+            Color(0xFFFFF9C4), // Light yellow
+            Colors.white,
+          ],
+          stops: [0.0, 0.3, 0.7, 1.0],
+        ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color(0xFF00897B).withOpacity(0.3),
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: const Color(0xFF00897B).withOpacity(0.2),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+            spreadRadius: 2,
+          ),
+          BoxShadow(
+            color: Colors.white.withOpacity(0.8),
             blurRadius: 10,
-            offset: const Offset(0, 5),
+            offset: const Offset(-5, -5),
           ),
         ],
       ),
@@ -151,11 +171,26 @@ class _ScrollableCounterState extends State<ScrollableCounter> {
           
           // Separator
           Container(
-            width: 2,
+            width: 3,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(1),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFF00897B).withOpacity(0.3),
+                  const Color(0xFF00897B),
+                  const Color(0xFF00897B).withOpacity(0.3),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(2),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF00897B).withOpacity(0.3),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
           ),
           
@@ -169,11 +204,26 @@ class _ScrollableCounterState extends State<ScrollableCounter> {
           
           // Separator
           Container(
-            width: 2,
+            width: 3,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(1),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFF00897B).withOpacity(0.3),
+                  const Color(0xFF00897B),
+                  const Color(0xFF00897B).withOpacity(0.3),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(2),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF00897B).withOpacity(0.3),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
           ),
           
@@ -200,10 +250,11 @@ class _ScrollableCounterState extends State<ScrollableCounter> {
         // Label
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[600],
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2C3E50),
+            letterSpacing: 0.5,
           ),
         ),
         const SizedBox(height: 8),
@@ -213,9 +264,30 @@ class _ScrollableCounterState extends State<ScrollableCounter> {
           width: 60,
           height: 120,
           decoration: BoxDecoration(
-            color: Colors.grey[50],
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white.withOpacity(0.9),
+                color.withOpacity(0.1),
+                Colors.white.withOpacity(0.9),
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: color.withOpacity(0.3), width: 2),
+            border: Border.all(color: color.withOpacity(0.5), width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+              BoxShadow(
+                color: Colors.white.withOpacity(0.8),
+                blurRadius: 6,
+                offset: const Offset(-2, -2),
+              ),
+            ],
           ),
           child: ListWheelScrollView.useDelegate(
             controller: controller,

@@ -171,13 +171,26 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF87CEEB), // Light blue
+              Color(0xFFB0E0E6), // Powder blue
+              Colors.white,
+            ],
+            stops: [0.0, 0.6, 1.0],
+          ),
+        ),
+        child: SafeArea(
         child: Column(
           children: [
             // Header
             Container(
-              color: Colors.black,
+              color: Colors.white.withOpacity(0.9),
               padding: const EdgeInsets.all(20.0),
               child: AvicastHeader(
                 pageTitle: 'Camera',
@@ -190,7 +203,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              color: Colors.black87,
+              color: Colors.white.withOpacity(0.8),
               child: Row(
                 children: [
                   const Icon(
@@ -206,7 +219,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         Text(
                           _getCurrentTime(),
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF2C3E50),
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -214,7 +227,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         Text(
                           _getCurrentDate(),
                           style: const TextStyle(
-                            color: Colors.grey,
+                            color: Color(0xFF7F8C8D),
                             fontSize: 12,
                           ),
                         ),
@@ -245,7 +258,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                color: Colors.black87,
+                color: Colors.white.withOpacity(0.8),
                 child: Row(
                   children: [
                     const Icon(
@@ -261,7 +274,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                           Text(
                             'GPS: ${_currentPosition!.latitude.toStringAsFixed(6)}, ${_currentPosition!.longitude.toStringAsFixed(6)}',
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Color(0xFF2C3E50),
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -270,7 +283,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                             Text(
                               _currentAddress!,
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Color(0xFF7F8C8D),
                                 fontSize: 10,
                               ),
                               maxLines: 1,
@@ -307,6 +320,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             _buildCameraControls(),
           ],
         ),
+        ),
       ),
     );
   }
@@ -315,7 +329,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(
-          color: Colors.white,
+          color: Color(0xFF2C3E50),
         ),
       );
     }
@@ -334,19 +348,19 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             Text(
               'Camera Error',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Colors.white,
+                color: Color(0xFF2C3E50),
               ),
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Text(
-                _errorMessage!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[400],
-                ),
-                textAlign: TextAlign.center,
+              child:             Text(
+              _errorMessage!,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Color(0xFF7F8C8D),
               ),
+              textAlign: TextAlign.center,
+            ),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
@@ -366,7 +380,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       return const Center(
         child: Text(
           'Camera not initialized',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Color(0xFF2C3E50)),
         ),
       );
     }
@@ -423,8 +437,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             icon: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Color(0xFF2C3E50).withOpacity(0.8),
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               child: const Icon(
                 Icons.photo_library,
@@ -444,9 +465,16 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 color: _isCapturing ? Colors.grey : Colors.white,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white,
+                  color: Color(0xFF2C3E50),
                   width: 4,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: _isCapturing
                   ? const Center(
@@ -455,7 +483,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         height: 24,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2C3E50)),
                         ),
                       ),
                     )
@@ -473,8 +501,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             icon: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Color(0xFF2C3E50).withOpacity(0.8),
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               child: const Icon(
                 Icons.flip_camera_ios,

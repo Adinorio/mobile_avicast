@@ -21,6 +21,13 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 // Features - Sites
 import 'features/sites/data/services/sites_database_service.dart';
 
+// Core - Database
+import 'core/database/database_service.dart';
+import 'core/database/web_storage_service.dart';
+import 'core/database/repositories/sites_repository.dart';
+import 'core/database/repositories/bird_counts_repository.dart';
+import 'core/database/migration_service.dart';
+
 // Features - Notes
 import 'features/notes/data/repositories/notes_repository_impl.dart';
 import 'features/notes/data/services/notes_local_storage_service.dart';
@@ -81,6 +88,20 @@ Future<void> init() async {
   //! Features - Sites
   // Services
   sl.registerLazySingleton(() => SitesDatabaseService());
+  
+  //! Core - Database
+  // Database service
+  sl.registerLazySingleton(() => DatabaseService.instance);
+  
+  // Web storage service
+  sl.registerLazySingleton(() => WebStorageService.instance);
+  
+  // Repositories
+  sl.registerLazySingleton(() => SitesRepository());
+  sl.registerLazySingleton(() => BirdCountsRepository());
+  
+  // Migration service
+  sl.registerLazySingleton(() => MigrationService());
 
   //! Features - Camera
   // Services
