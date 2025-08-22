@@ -4,12 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Site {
   final String id;
   final String name;
+  final String? description;
+  final double? latitude;
+  final double? longitude;
   final DateTime createdAt;
   final List<BirdCount> birdCounts;
 
   Site({
     required this.id,
     required this.name,
+    this.description,
+    this.latitude,
+    this.longitude,
     required this.createdAt,
     this.birdCounts = const [],
   });
@@ -18,6 +24,9 @@ class Site {
     return {
       'id': id,
       'name': name,
+      'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
       'createdAt': createdAt.toIso8601String(),
       'birdCounts': birdCounts.map((count) => count.toJson()).toList(),
     };
@@ -27,6 +36,9 @@ class Site {
     return Site(
       id: json['id'],
       name: json['name'],
+      description: json['description'],
+      latitude: json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null,
+      longitude: json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null,
       createdAt: DateTime.parse(json['createdAt']),
       birdCounts: (json['birdCounts'] as List?)
           ?.map((count) => BirdCount.fromJson(count))

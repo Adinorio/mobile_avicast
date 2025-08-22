@@ -368,7 +368,7 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF87CEEB),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
@@ -387,17 +387,39 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                           Text(
                             'Bird Name:',
                             style: TextStyle(
-                              color: Colors.grey[700],
+                              color: Colors.grey[800],
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 8),
+                          
+                          // Bird Image
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: _buildBirdImage(),
+                            ),
+                          ),
+                          
+                          const SizedBox(height: 16),
                           Text(
                             widget.birdName,
                             style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 20,
+                              color: Color(0xFF2C3E50),
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -407,9 +429,10 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                           Text(
                             '(${widget.birdScientificName})',
                             style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 16,
+                              color: Colors.grey[700],
+                              fontSize: 18,
                               fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -431,12 +454,27 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text(
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE3F2FD),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: const Color(0xFF2196F3)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF2196F3).withOpacity(0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Text(
                               widget.birdFamily,
                               style: const TextStyle(
-                                color: Colors.black87,
+                                  color: Color(0xFF1976D2),
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -454,18 +492,25 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 // Status code badge
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
+                            Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
                                     color: _getStatusColor(widget.birdStatus),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    widget.birdStatus,
+                                borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: _getStatusColor(widget.birdStatus).withOpacity(0.3),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                              ),
+                              child: Text(
+                                widget.birdStatus,
                                     style: TextStyle(
                                       color: _getStatusTextColor(widget.birdStatus),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
@@ -473,27 +518,40 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                                 // Full status description with tooltip
                                 GestureDetector(
                                   onTap: () => _showIUCNStatusInfo(),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        _getStatusDescription(widget.birdStatus),
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w400,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[100],
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.grey[300]!),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey[300]!.withOpacity(0.3),
+                                          blurRadius: 3,
+                                          offset: const Offset(0, 1),
                                         ),
-                                        textAlign: TextAlign.end,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Icon(
-                                        Icons.info_outline,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          _getStatusDescription(widget.birdStatus),
+                                          style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Icon(
+                                          Icons.info_outline,
+                                          size: 14,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -542,7 +600,7 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                     
                     const SizedBox(height: 30),
                     
-                                        // Action buttons row
+                    // Action buttons row
                     Row(
                       children: [
                         // Export Count button (green)
@@ -604,8 +662,8 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                             ),
                           ),
                         ),
-                  ],
-                                    ),
+                      ],
+                    ),
                     
                     const SizedBox(height: 20),
                     
@@ -800,8 +858,8 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                   ),
                   const SizedBox(height: 30),
                 ],
-                
-                // Observer name input
+                    
+                    // Observer name input
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
@@ -825,19 +883,19 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                                                      TextField(
-                              controller: _nameController,
-                              decoration: const InputDecoration(
+                          TextField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
                                 hintText: 'Enter your name (optional)...',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  _observerName = value;
-                                });
-                              },
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             ),
+                            onChanged: (value) {
+                              setState(() {
+                                _observerName = value;
+                              });
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -845,8 +903,8 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                 ),
               ],
             ),
+            ),
           ),
-        ),
         ),
       ),
       bottomNavigationBar: Container(
@@ -923,6 +981,64 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBirdImage() {
+    // Try to get bird image from the API service
+    final imagePath = _birdApiService.getBirdImagePath(widget.birdName);
+    final imageUrl = _birdApiService.getBirdImageUrl(widget.birdName);
+    
+    // Debug: print what we're getting
+    print('Bird Name: ${widget.birdName}');
+    print('Image Path: $imagePath');
+    print('Image URL: $imageUrl');
+    
+    if (imagePath != null && imagePath.isNotEmpty) {
+      // Use local asset image
+      return Image.asset(
+        imagePath,
+        width: 80,
+        height: 80,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          print('Error loading image: $error');
+          return _buildPlaceholderImage();
+        },
+      );
+    } else if (imageUrl != null && imageUrl.isNotEmpty) {
+      // Use network image with caching
+      return Image.network(
+        imageUrl,
+        width: 80,
+        height: 80,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          print('Error loading network image: $error');
+          return _buildPlaceholderImage();
+        },
+      );
+    } else {
+      // Show placeholder
+      print('No image path or URL found, showing placeholder');
+      return _buildPlaceholderImage();
+    }
+  }
+
+  Widget _buildPlaceholderImage() {
+    return Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Icon(
+        Icons.photo_camera,
+        size: 32,
+        color: Colors.grey[600],
       ),
     );
   }

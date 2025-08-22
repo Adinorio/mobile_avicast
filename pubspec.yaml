@@ -53,6 +53,14 @@ dependencies:
   
   # Network Discovery (for local WiFi)
   network_info_plus: ^4.1.0
+  
+  # Camera & Location
+  camera: ^0.10.5+5
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  
+  # Local Storage
+  path_provider: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -64,4 +72,5 @@ flutter:
   
   assets:
     - assets/images/
+    - assets/images/birds/
     - assets/icons/ 

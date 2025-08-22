@@ -21,6 +21,8 @@ class OfflineBirdApiService {
       'migration': 'Long-distance migrant',
       'threats': ['Habitat loss', 'Hunting', 'Climate change', 'Disturbance'],
       'conservation_actions': ['Protected areas', 'Habitat restoration', 'Anti-poaching measures'],
+      'image_path': 'assets/images/birds/spoon_billed_sandpiper.jpg',
+      'image_url': null,
     },
     'chinese_egret': {
       'common_name': 'Chinese Egret',
@@ -35,6 +37,8 @@ class OfflineBirdApiService {
       'migration': 'Medium-distance migrant',
       'threats': ['Habitat destruction', 'Pollution', 'Disturbance'],
       'conservation_actions': ['Wetland protection', 'Pollution control', 'Public awareness'],
+      'image_path': 'assets/images/birds/chinese_egret.jpg',
+      'image_url': null,
     },
     'black_faced_spoonbill': {
       'common_name': 'Black-faced Spoonbill',
@@ -49,6 +53,8 @@ class OfflineBirdApiService {
       'migration': 'Short to medium-distance migrant',
       'threats': ['Habitat loss', 'Pollution', 'Climate change'],
       'conservation_actions': ['Wetland conservation', 'Habitat restoration', 'Monitoring'],
+      'image_path': 'assets/images/birds/black_faced_spoonbill.jpg',
+      'image_url': null,
     },
     'baers_pochard': {
       'common_name': "Baer's Pochard",
@@ -63,6 +69,8 @@ class OfflineBirdApiService {
       'migration': 'Medium-distance migrant',
       'threats': ['Habitat destruction', 'Hunting', 'Pollution'],
       'conservation_actions': ['Wetland protection', 'Hunting regulations', 'Habitat restoration'],
+      'image_path': 'assets/images/birds/baers_pochard.jpg',
+      'image_url': null,
     },
     'far_eastern_curlew': {
       'common_name': 'Far Eastern Curlew',
@@ -77,6 +85,8 @@ class OfflineBirdApiService {
       'migration': 'Long-distance migrant',
       'threats': ['Habitat loss', 'Climate change', 'Disturbance'],
       'conservation_actions': ['Coastal protection', 'Habitat restoration', 'Disturbance management'],
+      'image_path': 'assets/images/birds/far_eastern_curlew.jpg',
+      'image_url': null,
     },
     'whiskered_tern': {
       'common_name': 'Whiskered Tern',
@@ -91,6 +101,8 @@ class OfflineBirdApiService {
       'migration': 'Variable, some populations migratory',
       'threats': ['Habitat modification', 'Pollution', 'Climate change'],
       'conservation_actions': ['Wetland protection', 'Water quality management'],
+      'image_path': 'assets/images/birds/whiskered_tern.jpg',
+      'image_url': null,
     },
     'barn_swallow': {
       'common_name': 'Barn Swallow',
@@ -105,6 +117,8 @@ class OfflineBirdApiService {
       'migration': 'Long-distance migrant in many populations',
       'threats': ['Habitat change', 'Pesticides', 'Climate change'],
       'conservation_actions': ['Habitat preservation', 'Reduced pesticide use'],
+      'image_path': 'assets/images/birds/barn_swallow.jpg',
+      'image_url': null,
     },
     'peregrine_falcon': {
       'common_name': 'Peregrine Falcon',
@@ -119,6 +133,8 @@ class OfflineBirdApiService {
       'migration': 'Variable, some populations migratory',
       'threats': ['Habitat loss', 'Pesticides', 'Disturbance'],
       'conservation_actions': ['Cliff protection', 'Reduced pesticide use', 'Monitoring'],
+      'image_path': 'assets/images/birds/peregrine_falcon.jpg',
+      'image_url': null,
     },
     'great_knot': {
       'common_name': 'Great Knot',
@@ -133,6 +149,8 @@ class OfflineBirdApiService {
       'migration': 'Long-distance migrant',
       'threats': ['Habitat loss', 'Climate change', 'Disturbance'],
       'conservation_actions': ['Coastal protection', 'Habitat restoration', 'Disturbance management'],
+      'image_path': 'assets/images/birds/great_knot.jpg',
+      'image_url': null,
     },
     'nordmanns_greenshank': {
       'common_name': "Nordmann's Greenshank",
@@ -147,6 +165,8 @@ class OfflineBirdApiService {
       'migration': 'Medium-distance migrant',
       'threats': ['Habitat loss', 'Pollution', 'Disturbance'],
       'conservation_actions': ['Wetland protection', 'Habitat restoration', 'Monitoring'],
+      'image_path': 'assets/images/birds/nordmanns_greenshank.jpg',
+      'image_url': null,
     },
     'common_redshank': {
       'common_name': 'Common Redshank',
@@ -156,11 +176,13 @@ class OfflineBirdApiService {
       'iucn_status_text': 'Least Concern',
       'habitat': 'Wetlands, marshes, coastal areas',
       'distribution': 'Europe, Asia, Africa',
-      'identification': 'Medium-sized wader with red legs and bill base',
+      'identification': 'Medium-sized wader with red legs and white cheeks',
       'behavior': 'Wades in shallow water, feeds on invertebrates',
       'migration': 'Variable, some populations migratory',
       'threats': ['Habitat loss', 'Pollution', 'Climate change'],
       'conservation_actions': ['Wetland protection', 'Water quality management'],
+      'image_path': 'assets/images/birds/common_redshank.jpg',
+      'image_url': null,
     },
     'saunderss_gull': {
       'common_name': "Saunders's Gull",
@@ -175,6 +197,8 @@ class OfflineBirdApiService {
       'migration': 'Short-distance migrant',
       'threats': ['Habitat loss', 'Pollution', 'Disturbance'],
       'conservation_actions': ['Coastal protection', 'Habitat restoration', 'Monitoring'],
+      'image_path': 'assets/images/birds/saunderss_gull.jpg',
+      'image_url': null,
     },
     'oriental_stork': {
       'common_name': 'Oriental Stork',
@@ -189,6 +213,8 @@ class OfflineBirdApiService {
       'migration': 'Medium-distance migrant',
       'threats': ['Habitat destruction', 'Hunting', 'Pollution'],
       'conservation_actions': ['Wetland protection', 'Hunting regulations', 'Habitat restoration'],
+      'image_path': 'assets/images/birds/oriental_stork.jpg',
+      'image_url': null,
     },
     'red_crowned_crane': {
       'common_name': 'Red-crowned Crane',
@@ -203,6 +229,8 @@ class OfflineBirdApiService {
       'migration': 'Medium-distance migrant',
       'threats': ['Habitat loss', 'Hunting', 'Pollution'],
       'conservation_actions': ['Wetland protection', 'Hunting regulations', 'Habitat restoration'],
+      'image_path': 'assets/images/birds/red_crowned_crane.jpg',
+      'image_url': null,
     },
     'chinese_crested_tern': {
       'common_name': 'Chinese Crested Tern',
@@ -217,6 +245,8 @@ class OfflineBirdApiService {
       'migration': 'Unknown, likely short-distance',
       'threats': ['Habitat loss', 'Disturbance', 'Unknown'],
       'conservation_actions': ['Research needed', 'Habitat protection', 'Monitoring'],
+      'image_path': 'assets/images/birds/chinese_crested_tern.jpg',
+      'image_url': null,
     },
   };
 
@@ -303,5 +333,47 @@ class OfflineBirdApiService {
     } catch (e) {
       // Keep using static database if import fails
     }
+  }
+
+  // Get bird image path by common name
+  String? getBirdImagePath(String commonName) {
+    final birdInfo = getBirdInfo(commonName);
+    if (birdInfo != null && birdInfo['image_path'] != null) {
+      return birdInfo['image_path'];
+    }
+    
+    // Fallback: try to find by exact common name match
+    for (final bird in _birdDatabase.values) {
+      if (bird['common_name'] == commonName) {
+        return bird['image_path'];
+      }
+    }
+    
+    // Fallback: try to find by case-insensitive match
+    for (final bird in _birdDatabase.values) {
+      if (bird['common_name'].toString().toLowerCase() == commonName.toLowerCase()) {
+        return bird['image_path'];
+      }
+    }
+    
+    return null;
+  }
+
+  // Get bird image URL by common name
+  String? getBirdImageUrl(String commonName) {
+    final birdInfo = getBirdInfo(commonName);
+    return birdInfo?['image_url'];
+  }
+
+  // Check if bird has a local image
+  bool hasLocalImage(String commonName) {
+    final imagePath = getBirdImagePath(commonName);
+    return imagePath != null && imagePath.isNotEmpty;
+  }
+
+  // Check if bird has a network image
+  bool hasNetworkImage(String commonName) {
+    final imageUrl = getBirdImageUrl(commonName);
+    return imageUrl != null && imageUrl.isNotEmpty;
   }
 } 

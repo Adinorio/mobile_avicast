@@ -27,7 +27,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': Colors.red,
       'family': 'Scolopacidae',
       'scientificName': 'Calidris pygmaea',
-      'image': 'assets/images/spoon_billed_sandpiper.jpg',
+      'image': 'assets/images/birds/spoon_billed_sandpiper.jpg',
     },
     {
       'name': 'Chinese Egret',
@@ -37,7 +37,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Ardeidae',
       'scientificName': 'Egretta eulophotes',
-      'image': 'assets/images/chinese_egret.jpg',
+      'image': 'assets/images/birds/chinese_egret.jpg',
     },
     {
       'name': 'Black-faced Spoonbill',
@@ -47,7 +47,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFFD700), // Gold/yellow
       'family': 'Threskiornithidae',
       'scientificName': 'Platalea minor',
-      'image': 'assets/images/black_faced_spoonbill.jpg',
+      'image': 'assets/images/birds/black_faced_spoonbill.jpg',
     },
     {
       'name': "Baer's Pochard",
@@ -57,7 +57,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': Colors.red,
       'family': 'Anatidae',
       'scientificName': 'Aythya baeri',
-      'image': 'assets/images/baers_pochard.jpg',
+      'image': 'assets/images/birds/baers_pochard.jpg',
     },
     {
       'name': 'Far Eastern Curlew',
@@ -67,7 +67,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Scolopacidae',
       'scientificName': 'Numenius madagascariensis',
-      'image': 'assets/images/far_eastern_curlew.jpg',
+      'image': 'assets/images/birds/far_eastern_curlew.jpg',
     },
     {
       'name': 'Whiskered Tern',
@@ -77,7 +77,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Laridae',
       'scientificName': 'Chlidonias hybrida',
-      'image': 'assets/images/whiskered_tern.jpg',
+      'image': 'assets/images/birds/whiskered_tern.jpg',
     },
     {
       'name': 'Barn Swallow',
@@ -87,7 +87,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Hirundinidae',
       'scientificName': 'Hirundo rustica',
-      'image': 'assets/images/barn_swallow.jpg',
+      'image': 'assets/images/birds/barn_swallow.jpg',
     },
     {
       'name': 'Peregrine Falcon',
@@ -97,7 +97,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Falconidae',
       'scientificName': 'Falco peregrinus',
-      'image': 'assets/images/peregrine_falcon.jpg',
+      'image': 'assets/images/birds/peregrine_falcon.jpg',
     },
     {
       'name': 'Great Knot',
@@ -107,7 +107,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Scolopacidae',
       'scientificName': 'Calidris tenuirostris',
-      'image': 'assets/images/great_knot.jpg',
+      'image': 'assets/images/birds/great_knot.jpg',
     },
     {
       'name': 'Nordmann\'s Greenshank',
@@ -117,7 +117,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFFA500), // Orange
       'family': 'Scolopacidae',
       'scientificName': 'Tringa guttifer',
-      'image': 'assets/images/nordmanns_greenshank.jpg',
+      'image': 'assets/images/birds/nordmanns_greenshank.jpg',
     },
     {
       'name': 'Common Redshank',
@@ -127,7 +127,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFF90EE90), // Light green
       'family': 'Scolopacidae',
       'scientificName': 'Tringa totanus',
-      'image': 'assets/images/common_redshank.jpg',
+      'image': 'assets/images/birds/common_redshank.jpg',
     },
     {
       'name': 'Saunders\'s Gull',
@@ -137,7 +137,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFFD700), // Gold/yellow
       'family': 'Laridae',
       'scientificName': 'Saundersilarus saundersi',
-      'image': 'assets/images/saunders_gull.jpg',
+      'image': 'assets/images/birds/saunderss_gull.jpg',
     },
     {
       'name': 'Oriental Stork',
@@ -147,7 +147,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Ciconiidae',
       'scientificName': 'Ciconia boyciana',
-      'image': 'assets/images/oriental_stork.jpg',
+      'image': 'assets/images/birds/oriental_stork.jpg',
     },
     {
       'name': 'Red-crowned Crane',
@@ -157,7 +157,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': const Color(0xFFFFD700), // Gold/yellow
       'family': 'Gruidae',
       'scientificName': 'Grus japonensis',
-      'image': 'assets/images/red_crowned_crane.jpg',
+      'image': 'assets/images/birds/red_crowned_crane.jpg',
     },
     {
       'name': 'Chinese Crested Tern',
@@ -167,7 +167,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'statusColor': Colors.grey,
       'family': 'Laridae',
       'scientificName': 'Thalasseus bernsteini',
-      'image': 'assets/images/chinese_crested_tern.jpg',
+      'image': 'assets/images/birds/chinese_crested_tern.jpg',
     },
   ];
 
@@ -528,19 +528,23 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
-                          // Bird image placeholder
+                          // Bird image
                           Container(
                             width: 64,
                             height: 64,
                             decoration: BoxDecoration(
-                              color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey[300]!, width: 1),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
-                            child: Icon(
-                              Icons.photo_camera,
-                              color: Colors.grey[500],
-                              size: 28,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: _buildBirdImage(bird['image']),
                             ),
                           ),
                           
@@ -555,7 +559,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                                 Text(
                                   bird['name'],
                                   style: const TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFF2C3E50),
                                   ),
@@ -563,40 +567,55 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                                 
                                 const SizedBox(height: 4),
                                 
-                                // Scientific name
+                                // Scientific name in parentheses
                                 Text(
-                                  bird['scientificName'],
+                                  '(${bird['scientificName']})',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     fontStyle: FontStyle.italic,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                
-                                const SizedBox(height: 6),
-                                
-                                // Family
-                                Text(
-                                  'Family: ${bird['family']}',
-                                  style: TextStyle(
                                     color: Colors.grey[700],
-                                    fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 
                                 const SizedBox(height: 8),
                                 
-                                // Status information
+                                // Family in highlighted box
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE3F2FD),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: const Color(0xFF2196F3)),
+                                  ),
+                                  child: Text(
+                                    'Family: ${bird['family']}',
+                                    style: const TextStyle(
+                                      color: Color(0xFF1976D2),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                
+                                const SizedBox(height: 12),
+                                
+                                // IUCN Status information
                                 Row(
                                   children: [
                                     // Status badge
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                       decoration: BoxDecoration(
                                         color: bird['statusColor'],
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(16),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: bird['statusColor'].withOpacity(0.3),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
                                       ),
                                       child: Text(
                                         bird['status'],
@@ -604,39 +623,48 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                                           color: bird['status'] == 'VU' || bird['status'] == 'LC' || bird['status'] == 'DD'
                                               ? Colors.black 
                                               : Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
                                         ),
                                       ),
                                     ),
                                     
-                                    const SizedBox(width: 8),
+                                    const SizedBox(width: 10),
                                     
                                     // Status text with info icon
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () => _showIUCNStatusInfo(bird),
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                bird['statusText'],
-                                                style: TextStyle(
-                                                  color: Colors.grey[700],
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.w500,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius: BorderRadius.circular(8),
+                                            border: Border.all(color: Colors.grey[300]!),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  bird['statusText'],
+                                                  style: TextStyle(
+                                                    color: Colors.grey[800],
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Icon(
-                                              Icons.info_outline,
-                                              size: 14,
-                                              color: Colors.grey[600],
-                                            ),
-                                          ],
+                                              const SizedBox(width: 4),
+                                              Icon(
+                                                Icons.info_outline,
+                                                size: 14,
+                                                color: Colors.grey[600],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -732,6 +760,31 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBirdImage(String imagePath) {
+    return Image.asset(
+      imagePath,
+      width: 64,
+      height: 64,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: Icon(
+            Icons.photo_camera,
+            color: Colors.grey[500],
+            size: 28,
+          ),
+        );
+      },
     );
   }
 } 
