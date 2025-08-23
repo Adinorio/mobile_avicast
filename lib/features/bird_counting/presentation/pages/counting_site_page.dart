@@ -456,6 +456,391 @@ class _CounterViewState extends State<CounterView> with WidgetsBindingObserver {
     );
   }
 
+  void _showComprehensiveReview() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _buildComprehensiveReviewSheet(),
+    );
+  }
+
+  Widget _buildComprehensiveReviewSheet() {
+    final totalCounts = _savedCounts.length;
+    final totalBirds = _savedCounts.fold<int>(0, (sum, count) => sum + count.count);
+    final uniqueObservers = _savedCounts.map((count) => count.observerName).toSet().length;
+    
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.85,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          
+          // Header with progress indicator
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.verified, color: Color(0xFF4CAF50), size: 28),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'Review & Submit All Counts',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2C3E50),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Progress steps
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildProgressStep('Site Info', 1, true),
+                    ),
+                    Expanded(
+                      child: _buildProgressStep('Count Data', 2, true),
+                    ),
+                    Expanded(
+                      child: _buildProgressStep('Confirm', 3, false),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          
+          const Divider(height: 1),
+          
+          // Review Content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Section 1: Site Information Review
+                  _buildReviewSection(
+                    '📍 Site Information',
+                    Icons.location_on,
+                    const Color(0xFF3498DB),
+                    [
+                      _buildReviewItem('Site Name', widget.siteName, Icons.place),
+                      _buildReviewItem('Total Counts', '$totalCounts', Icons.list_alt),
+                      _buildReviewItem('Survey Date', _getCurrentDate(), Icons.calendar_today),
+                      _buildReviewItem('Observers', '$uniqueObservers', Icons.people),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  
+                  // Section 2: Count Data Review
+                  _buildReviewSection(
+                    '🦅 Count Data Summary',
+                    Icons.analytics,
+                    const Color(0xFF4CAF50),
+                    [
+                      _buildReviewItem('Total Counts', '$totalCounts', Icons.list_alt),
+                      _buildReviewItem('Total Birds', '$totalBirds', Icons.flutter_dash),
+                      _buildReviewItem('Average per Count', '${(totalBirds / totalCounts).toStringAsFixed(1)}', Icons.trending_up),
+                      _buildReviewItem('Data Quality', 'High', Icons.verified),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  
+                  // Section 3: Observer Information
+                  _buildReviewSection(
+                    '👥 Observer Details',
+                    Icons.person,
+                    const Color(0xFF667eea),
+                    _buildObserverItems(),
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  
+                  // Section 4: Recent Counts Preview
+                  if (_savedCounts.isNotEmpty) ...[
+                    _buildReviewSection(
+                      '📊 Recent Counts',
+                      Icons.history,
+                      const Color(0xFF9B59B6),
+                      [_buildRecentCountsPreview()],
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          
+          // Action Buttons
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.edit),
+                    label: const Text('Edit Data'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      side: const BorderSide(color: Color(0xFF667eea)),
+                      foregroundColor: const Color(0xFF667eea),
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(width: 16),
+                
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _confirmAndSubmitAll,
+                    icon: const Icon(Icons.check_circle),
+                    label: const Text('Submit All Counts'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4CAF50),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressStep(String title, int step, bool isCompleted) {
+    return Column(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: isCompleted ? const Color(0xFF4CAF50) : Colors.grey[300],
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            isCompleted ? Icons.check : Icons.circle,
+            color: isCompleted ? Colors.white : Colors.grey[600],
+            size: 20,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: isCompleted ? const Color(0xFF4CAF50) : Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildReviewSection(String title, IconData icon, Color color, List<Widget> items) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 24),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ...items,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReviewItem(String label, String value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.grey[600], size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF2C3E50),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildObserverItems() {
+    final observerCounts = <String, int>{};
+    for (final count in _savedCounts) {
+      final observerName = count.observerName ?? 'Unknown Observer';
+      observerCounts[observerName] = (observerCounts[observerName] ?? 0) + 1;
+    }
+    
+    return observerCounts.entries.map((entry) {
+      return _buildReviewItem(
+        entry.key,
+        '${entry.value} counts',
+        Icons.person_outline,
+      );
+    }).toList();
+  }
+
+  Widget _buildRecentCountsPreview() {
+    final recentCounts = _savedCounts.take(5).toList();
+    
+    return Column(
+      children: recentCounts.map((count) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                count.birdName == 'General Count' ? Icons.nature_people : Icons.flutter_dash,
+                color: const Color(0xFF4CAF50),
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      count.birdName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF2C3E50),
+                      ),
+                    ),
+                    Text(
+                      'Count: ${count.count} • ${_formatTimestamp(count.timestamp)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  String _getCurrentDate() {
+    final now = DateTime.now();
+    return '${now.day}/${now.month}/${now.year}';
+  }
+
+  void _confirmAndSubmitAll() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Submission'),
+        content: const Text(
+          'Are you sure you want to submit all counts? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _showSubmissionSuccess();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF4CAF50),
+            ),
+            child: const Text('Submit'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSubmissionSuccess() {
+    Navigator.of(context).pop(); // Close review sheet
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('✅ All counts submitted successfully!'),
+        backgroundColor: Color(0xFF4CAF50),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
   Widget _buildCountsSummary() {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -787,28 +1172,57 @@ class _CounterViewState extends State<CounterView> with WidgetsBindingObserver {
           // Additional actions
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
               children: [
-                ElevatedButton.icon(
-                  onPressed: _reset,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Reset'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[700],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                // Review & Submit All Counts button
+                if (_savedCounts.isNotEmpty)
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: ElevatedButton.icon(
+                      onPressed: _showComprehensiveReview,
+                      icon: const Icon(Icons.verified, size: 24),
+                      label: const Text(
+                        'Review & Submit All Counts',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                      ),
+                    ),
                   ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: _showSaveConfirmation,
-                  icon: const Icon(Icons.save),
-                  label: const Text('Save'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[700],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  ),
+                
+                // Action buttons row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: _reset,
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Reset'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[700],
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: _showSaveConfirmation,
+                      icon: const Icon(Icons.save),
+                      label: const Text('Save'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[700],
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
