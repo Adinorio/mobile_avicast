@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../utils/avicast_header.dart';
+import '../../../../utils/theme.dart';
+import '../../data/services/sites_database_service.dart';
 
 class SiteBirdsPage extends StatefulWidget {
   final String siteName;
@@ -13,9 +15,11 @@ class SiteBirdsPage extends StatefulWidget {
   State<SiteBirdsPage> createState() => _SiteBirdsPageState();
 }
 
-class _SiteBirdsPageState extends State<SiteBirdsPage> {
+class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserver {
   final TextEditingController _searchController = TextEditingController();
   String _selectedSortOption = 'A - Z';
+  final SitesDatabaseService _databaseService = SitesDatabaseService();
+  List<BirdCount> _savedCounts = [];
   
   // Sample bird data with conservation status and family
   final List<Map<String, dynamic>> _birds = [
@@ -73,8 +77,8 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Whiskered Tern',
       'status': 'LC',
       'statusText': 'Least Concern',
-      'statusDescription': 'Widespread and abundant, not at risk',
-      'statusColor': const Color(0xFF90EE90), // Light green
+      'statusDescription': 'Species is not currently at risk of extinction',
+      'statusColor': Colors.green,
       'family': 'Laridae',
       'scientificName': 'Chlidonias hybrida',
       'image': 'assets/images/birds/whiskered_tern.jpg',
@@ -83,8 +87,8 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Barn Swallow',
       'status': 'LC',
       'statusText': 'Least Concern',
-      'statusDescription': 'Widespread and abundant, not at risk',
-      'statusColor': const Color(0xFF90EE90), // Light green
+      'statusDescription': 'Species is not currently at risk of extinction',
+      'statusColor': Colors.green,
       'family': 'Hirundinidae',
       'scientificName': 'Hirundo rustica',
       'image': 'assets/images/birds/barn_swallow.jpg',
@@ -93,8 +97,8 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Peregrine Falcon',
       'status': 'LC',
       'statusText': 'Least Concern',
-      'statusDescription': 'Widespread and abundant, not at risk',
-      'statusColor': const Color(0xFF90EE90), // Light green
+      'statusDescription': 'Species is not currently at risk of extinction',
+      'statusColor': Colors.green,
       'family': 'Falconidae',
       'scientificName': 'Falco peregrinus',
       'image': 'assets/images/birds/peregrine_falcon.jpg',
@@ -110,11 +114,11 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'image': 'assets/images/birds/great_knot.jpg',
     },
     {
-      'name': 'Nordmann\'s Greenshank',
-      'status': 'NT',
-      'statusText': 'Near Threatened',
-      'statusDescription': 'Close to qualifying for threatened status',
-      'statusColor': const Color(0xFFFFA500), // Orange
+      'name': "Nordmann's Greenshank",
+      'status': 'EN',
+      'statusText': 'Endangered',
+      'statusDescription': 'Facing very high risk of extinction in the wild',
+      'statusColor': const Color(0xFFFF8C00), // Dark orange
       'family': 'Scolopacidae',
       'scientificName': 'Tringa guttifer',
       'image': 'assets/images/birds/nordmanns_greenshank.jpg',
@@ -123,14 +127,14 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
       'name': 'Common Redshank',
       'status': 'LC',
       'statusText': 'Least Concern',
-      'statusDescription': 'Widespread and abundant, not at risk',
-      'statusColor': const Color(0xFF90EE90), // Light green
+      'statusDescription': 'Species is not currently at risk of extinction',
+      'statusColor': Colors.green,
       'family': 'Scolopacidae',
       'scientificName': 'Tringa totanus',
       'image': 'assets/images/birds/common_redshank.jpg',
     },
     {
-      'name': 'Saunders\'s Gull',
+      'name': "Saunders's Gull",
       'status': 'VU',
       'statusText': 'Vulnerable',
       'statusDescription': 'Facing high risk of extinction in the wild',
@@ -161,218 +165,133 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
     },
     {
       'name': 'Chinese Crested Tern',
-      'status': 'DD',
-      'statusText': 'Data Deficient',
-      'statusDescription': 'Insufficient data to assess conservation status',
-      'statusColor': Colors.grey,
+      'status': 'CR',
+      'statusText': 'Critically Endangered',
+      'statusDescription': 'Facing extremely high risk of extinction in the wild',
+      'statusColor': Colors.red,
       'family': 'Laridae',
       'scientificName': 'Thalasseus bernsteini',
       'image': 'assets/images/birds/chinese_crested_tern.jpg',
     },
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _loadSavedCounts();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh counts when app becomes active
+      _loadSavedCounts();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh counts when dependencies change (e.g., when returning to this page)
+    _loadSavedCounts();
+  }
+
+  Future<void> _loadSavedCounts() async {
+    try {
+      final sites = await _databaseService.getAllSites();
+      final currentSite = sites.firstWhere((site) => site.name == widget.siteName);
+      setState(() {
+        _savedCounts = currentSite.birdCounts;
+      });
+    } catch (e) {
+      setState(() {
+        _savedCounts = [];
+      });
+    }
+  }
+
   List<Map<String, dynamic>> get _filteredBirds {
-    final searchQuery = _searchController.text.toLowerCase();
-    var filtered = _birds.where((bird) => 
-      bird['name'].toLowerCase().contains(searchQuery)
-    ).toList();
-    
-    // Sort birds based on selected option
+    final searchTerm = _searchController.text.toLowerCase();
+    List<Map<String, dynamic>> filtered = _birds.where((bird) {
+      return bird['name'].toLowerCase().contains(searchTerm) ||
+             bird['scientificName'].toLowerCase().contains(searchTerm) ||
+             bird['family'].toLowerCase().contains(searchTerm);
+    }).toList();
+
+    // Apply sorting
     switch (_selectedSortOption) {
       case 'A - Z':
         filtered.sort((a, b) => a['name'].compareTo(b['name']));
         break;
+      case 'Z - A':
+        filtered.sort((a, b) => b['name'].compareTo(a['name']));
+        break;
+      case 'Status':
+        filtered.sort((a, b) => _getStatusPriority(a['status']).compareTo(_getStatusPriority(b['status'])));
+        break;
       case 'Family':
         filtered.sort((a, b) => a['family'].compareTo(b['family']));
         break;
-      case 'IUCN Status':
-        // Sort by IUCN status priority: CR > EN > VU > NT > LC > DD
-        final statusPriority = {'CR': 1, 'EN': 2, 'VU': 3, 'NT': 4, 'LC': 5, 'DD': 6};
-        filtered.sort((a, b) {
-          final aPriority = statusPriority[a['status']] ?? 7;
-          final bPriority = statusPriority[b['status']] ?? 7;
-          return aPriority.compareTo(bPriority);
-        });
-        break;
     }
-    
+
     return filtered;
   }
 
-  void _showIUCNStatusInfo(Map<String, dynamic> bird) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: bird['statusColor'],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  bird['status'],
-                  style: TextStyle(
-                    color: bird['status'] == 'VU' || bird['status'] == 'LC' 
-                        ? Colors.black 
-                        : Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                bird['statusText'],
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                bird['statusDescription'],
-                style: const TextStyle(
-                  fontSize: 16,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'IUCN Red List Categories:',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              _buildIUCNCategoryInfo('CR', 'Critically Endangered', Colors.red, 'Facing extremely high risk of extinction'),
-              _buildIUCNCategoryInfo('EN', 'Endangered', const Color(0xFFFF8C00), 'Facing very high risk of extinction'),
-              _buildIUCNCategoryInfo('VU', 'Vulnerable', const Color(0xFFFFD700), 'Facing high risk of extinction'),
-              _buildIUCNCategoryInfo('NT', 'Near Threatened', const Color(0xFFFFA500), 'Close to qualifying for threatened status'),
-              _buildIUCNCategoryInfo('LC', 'Least Concern', const Color(0xFF90EE90), 'Widespread and abundant, not at risk'),
-              _buildIUCNCategoryInfo('DD', 'Data Deficient', Colors.grey, 'Insufficient data to assess conservation status'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
+  int _getStatusPriority(String status) {
+    switch (status) {
+      case 'CR': return 1; // Critically Endangered
+      case 'EN': return 2; // Endangered
+      case 'VU': return 3; // Vulnerable
+      case 'NT': return 4; // Near Threatened
+      case 'LC': return 5; // Least Concern
+      default: return 6;
+    }
   }
 
-  Widget _buildIUCNCategoryInfo(String code, String name, Color color, String description) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 20,
-            height: 20,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Center(
-                              child: Text(
-                  code,
-                  style: TextStyle(
-                    color: code == 'VU' || code == 'LC' || code == 'DD' ? Colors.black : Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  int _getBirdCount(String birdName) {
+    return _savedCounts
+        .where((count) => count.birdName == birdName)
+        .fold(0, (sum, count) => sum + count.count);
   }
 
-  void _showSortOptions() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Sort by'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text('A - Z'),
-                leading: Radio<String>(
-                  value: 'A - Z',
-                  groupValue: _selectedSortOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedSortOption = value!;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-              ListTile(
-                title: const Text('Family'),
-                leading: Radio<String>(
-                  value: 'Family',
-                  groupValue: _selectedSortOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedSortOption = value!;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-              ListTile(
-                title: const Text('IUCN Status'),
-                leading: Radio<String>(
-                  value: 'IUCN Status',
-                  groupValue: _selectedSortOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedSortOption = value!;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
+  String _getLastCountDate(String birdName) {
+    final counts = _savedCounts.where((count) => count.birdName == birdName).toList();
+    if (counts.isEmpty) return '';
+    
+    counts.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    final lastCount = counts.first.timestamp;
+    
+    final now = DateTime.now();
+    final difference = now.difference(lastCount);
+    
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
+  void _navigateToBirdCounter(Map<String, dynamic> bird) {
+    Navigator.of(context).pushNamed(
+      '/bird-counter',
+      arguments: {
+        'birdName': bird['name'],
+        'birdImage': bird['image'],
+        'birdStatus': bird['status'],
+        'birdFamily': bird['family'],
+        'birdScientificName': bird['scientificName'],
+        'siteName': widget.siteName,
       },
     );
   }
@@ -387,8 +306,8 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF87CEEB), // Light blue
-              Color(0xFFB0E0E6), // Powder blue
+              AppTheme.avicastBlue, // Light blue
+              AppTheme.avicastLightBlue, // Powder blue
               Colors.white,
             ],
             stops: [0.0, 0.6, 1.0],
@@ -398,94 +317,91 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
         child: Column(
           children: [
             // AVICAST Header
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: AvicastHeader(
-                pageTitle: widget.siteName.toUpperCase(),
-                showPageTitle: true,
-              ),
+            AvicastHeader(
+              pageTitle: '📍 ${widget.siteName}',
+              showPageTitle: true,
             ),
             
-            // Search and sort section
+            
+            
+            // Search and filter section
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
-              child: Row(
+              child: Column(
                 children: [
                   // Search bar
-                  Expanded(
-                    child: Container(
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.grey[300]!),
+                  TextField(
+                    controller: _searchController,
+                    onChanged: (value) => setState(() {}),
+                    decoration: InputDecoration(
+                      hintText: 'Search by name, scientific name, or family...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
                       ),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search birds...',
-                          hintStyle: TextStyle(color: Colors.grey[500]),
-                          prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        ),
-                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                   ),
                   
-                  const SizedBox(width: 12),
+                  const SizedBox(height: 16),
                   
-                  // Sort button
-                  GestureDetector(
-                    onTap: _showSortOptions,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF00897B),
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF00897B).withOpacity(0.3),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                  // Sort options
+                  Row(
+                    children: [
+                      const Text(
+                        'Sort by: ',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF2C3E50),
+                        ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.sort,
-                            color: Colors.white,
-                            size: 18,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              'A - Z',
+                              'Z - A',
+                              'Status',
+                              'Family',
+                            ].map((option) => Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: ChoiceChip(
+                                label: Text(option),
+                                selected: _selectedSortOption == option,
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(() {
+                                      _selectedSortOption = option;
+                                    });
+                                  }
+                                },
+                                                                  selectedColor: AppTheme.successColor,
+                                labelStyle: TextStyle(
+                                  color: _selectedSortOption == option ? Colors.white : Colors.grey[700],
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            )).toList(),
                           ),
-                          const SizedBox(width: 6),
-                          const Text(
-                            'Sort',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -493,24 +409,18 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
             
             const SizedBox(height: 20),
             
-            // Birds list
+            // Species list
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(16.0),
                 itemCount: _filteredBirds.length,
                 itemBuilder: (context, index) {
                   final bird = _filteredBirds[index];
+                  final birdCount = _getBirdCount(bird['name']);
+                  final lastCountDate = _getLastCountDate(bird['name']);
+                  
                   return GestureDetector(
-                    onTap: () {
-                      // Navigate to bird counter page
-                      Navigator.of(context).pushNamed(
-                        '/bird-counter',
-                        arguments: {
-                          'birdName': bird['name'],
-                          'birdData': bird,
-                        },
-                      );
-                    },
+                    onTap: () => _navigateToBirdCounter(bird),
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
@@ -586,86 +496,49 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFE3F2FD),
                                     borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: const Color(0xFF2196F3)),
+                                                                          border: Border.all(color: AppTheme.infoColor),
                                   ),
                                   child: Text(
-                                    'Family: ${bird['family']}',
+                                    bird['family'],
                                     style: const TextStyle(
-                                      color: Color(0xFF1976D2),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
+                                                                              color: AppTheme.primaryColor,
                                     ),
                                   ),
                                 ),
                                 
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 8),
                                 
-                                // IUCN Status information
+                                // Conservation status
                                 Row(
                                   children: [
-                                    // Status badge
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: bird['statusColor'],
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: bird['statusColor'].withOpacity(0.3),
-                                            blurRadius: 4,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
+                                        color: bird['statusColor'].withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(color: bird['statusColor']),
                                       ),
                                       child: Text(
                                         bird['status'],
                                         style: TextStyle(
-                                          color: bird['status'] == 'VU' || bird['status'] == 'LC' || bird['status'] == 'DD'
-                                              ? Colors.black 
-                                              : Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w700,
+                                          color: bird['statusColor'],
                                         ),
                                       ),
                                     ),
-                                    
-                                    const SizedBox(width: 10),
-                                    
-                                    // Status text with info icon
+                                    const SizedBox(width: 8),
                                     Expanded(
-                                      child: GestureDetector(
-                                        onTap: () => _showIUCNStatusInfo(bird),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[100],
-                                            borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(color: Colors.grey[300]!),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  bird['statusText'],
-                                                  style: TextStyle(
-                                                    color: Colors.grey[800],
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 4),
-                                              Icon(
-                                                Icons.info_outline,
-                                                size: 14,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ],
-                                          ),
+                                      child: Text(
+                                        bird['statusText'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.w500,
                                         ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
@@ -674,14 +547,62 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
                             ),
                           ),
                           
-                          // Arrow icon
-                          const Icon(
-                            Icons.arrow_forward_ios,
-                            color: Color(0xFF2C3E50),
-                            size: 16,
+                          // Count information
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              if (birdCount > 0) ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                                                          color: AppTheme.successColor,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    '$birdCount',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  lastCountDate,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ] else ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    '0',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'No counts',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
-                          ],
-                        ),
+                        ]),
                       ),
                     ),
                   );
@@ -692,99 +613,319 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> {
         ),
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: const BoxDecoration(
-          color: Color(0xFF87CEEB), // Light blue navigation bar
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // Document icon (left)
-            IconButton(
-              icon: const Icon(
-                Icons.description,
-                color: Colors.white,
-                size: 28,
-              ),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/notes');
-              },
-            ),
-            
-            // Bird icon (center) - Floating action button style
-            Container(
-              width: 70,
-              height: 70,
-              margin: const EdgeInsets.only(bottom: 20), // Overlap the top edge
-              decoration: BoxDecoration(
-                color: const Color(0xFF87CEEB), // Light blue background
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 3,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.flutter_dash,
-                color: Colors.white,
-                size: 36,
-              ),
-            ),
-            
-            // Camera icon (right)
-            IconButton(
-              icon: const Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-                size: 28,
-              ),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/camera');
-              },
-            ),
-          ],
-        ),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Refresh button (icon only)
+          FloatingActionButton(
+            onPressed: () => _loadSavedCounts(),
+            backgroundColor: AppTheme.avicastBlue,
+            foregroundColor: AppTheme.textPrimaryColor,
+            child: const Icon(Icons.refresh),
+          ),
+          const SizedBox(width: 16),
+          // View Summary button
+          FloatingActionButton.extended(
+            onPressed: _showCountsSummary,
+            icon: const Icon(Icons.analytics),
+            label: const Text('View Summary'),
+            backgroundColor: AppTheme.successColor,
+            foregroundColor: Colors.white,
+          ),
+        ],
       ),
     );
   }
 
+  void _showCountsSummary() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _buildCountsSummarySheet(),
+    );
+  }
+
+  Widget _buildCountsSummarySheet() {
+    final totalCounts = _savedCounts.length;
+    final totalBirds = _savedCounts.fold<int>(0, (sum, count) => sum + count.count);
+    final uniqueBirds = _savedCounts.map((count) => count.birdName).toSet().length;
+    
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.7,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                                  const Icon(Icons.analytics, color: AppTheme.successColor, size: 28),
+                const SizedBox(width: 12),
+                Text(
+                  '${widget.siteName} - Counts Summary',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3E50),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          const Divider(height: 1),
+          
+          // Summary stats
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildSummaryCard(
+                    'Total Counts',
+                    '$totalCounts',
+                    Icons.list_alt,
+                    AppTheme.infoColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildSummaryCard(
+                    'Total Birds',
+                    '$totalBirds',
+                    Icons.flutter_dash,
+                    AppTheme.successColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildSummaryCard(
+                    'Species',
+                    '$uniqueBirds',
+                    Icons.category,
+                    const Color(0xFFFF9800),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          const Divider(height: 1),
+          
+          // Recent counts
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    'Recent Counts',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2C3E50),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _savedCounts.isEmpty
+                      ? const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.info_outline, color: Colors.grey, size: 48),
+                              SizedBox(height: 16),
+                              Text(
+                                'No counts recorded yet',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Start counting birds to see your data here',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: _savedCounts.length,
+                          itemBuilder: (context, index) {
+                            final count = _savedCounts[index];
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[50],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[200]!),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.successColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      '${count.count}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          count.birdName,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Color(0xFF2C3E50),
+                                          ),
+                                        ),
+                                        if (count.observerName != null && count.observerName!.isNotEmpty)
+                                          Text(
+                                            'by ${count.observerName}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    _formatTimestamp(count.timestamp),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard(String title, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              color: color.withOpacity(0.8),
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatTimestamp(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+    
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
   Widget _buildBirdImage(String imagePath) {
-    return Image.asset(
-      imagePath,
+    if (imagePath.isNotEmpty) {
+      return Image.asset(
+        imagePath,
+        width: 64,
+        height: 64,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildPlaceholderImage();
+        },
+      );
+    } else {
+      return _buildPlaceholderImage();
+    }
+  }
+
+  Widget _buildPlaceholderImage() {
+    return Container(
       width: 64,
       height: 64,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          width: 64,
-          height: 64,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: Icon(
-            Icons.photo_camera,
-            color: Colors.grey[500],
-            size: 28,
-          ),
-        );
-      },
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Icon(
+        Icons.photo_camera,
+        size: 24,
+        color: Colors.grey[600],
+      ),
     );
   }
 } 

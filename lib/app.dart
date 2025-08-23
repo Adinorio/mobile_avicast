@@ -12,6 +12,7 @@ import 'features/bird_counting/presentation/pages/bird_counter_page.dart';
 import 'features/notes/presentation/pages/note_page.dart';
 import 'features/notes/presentation/pages/camera_page.dart';
 import 'screens/splash_screen.dart';
+import 'utils/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -20,41 +21,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Avicast Mobile',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF667eea),
-          brightness: Brightness.light,
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black87,
-        ),
-        cardTheme: CardThemeData(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-      ),
+      theme: AppTheme.lightTheme,
       home: const SplashScreen(),
       routes: {
         '/login': (context) => const LoginPage(),
@@ -160,7 +127,7 @@ class _MainAppState extends State<MainApp> {
       bottomNavigationBar: Container(
         height: 80,
         decoration: const BoxDecoration(
-          color: Color(0xFF87CEEB), // Light blue like in the second image
+          color: AppTheme.avicastBlue,
           boxShadow: [
             BoxShadow(
               color: Colors.black12,

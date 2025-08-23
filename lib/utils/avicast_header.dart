@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'theme.dart';
 
 class AvicastHeader extends StatelessWidget {
   final VoidCallback? onBackPressed;
@@ -25,9 +26,9 @@ class AvicastHeader extends StatelessWidget {
             // Back button (if enabled)
             if (showBackButton)
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back,
-                  color: Color(0xFF2C3E50),
+                  color: AppTheme.textPrimaryColor,
                   size: 24,
                 ),
                 onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
@@ -38,8 +39,8 @@ class AvicastHeader extends StatelessWidget {
             Container(
               width: 50,
               height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xFF87CEEB),
+              decoration: const BoxDecoration(
+                color: AppTheme.avicastBlue,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -51,23 +52,23 @@ class AvicastHeader extends StatelessWidget {
             const SizedBox(width: 15),
             
             // AVICAST Text
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'AVICAST',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C3E50),
+                    color: AppTheme.textPrimaryColor,
                     fontFamily: 'serif',
                   ),
                 ),
-                const Text(
+                Text(
                   'FIELD TOOL',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Color(0xFF7F8C8D),
+                    color: AppTheme.textSecondaryColor,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -85,7 +86,7 @@ class AvicastHeader extends StatelessWidget {
             style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2C3E50),
+              color: AppTheme.textPrimaryColor,
             ),
           ),
         ],

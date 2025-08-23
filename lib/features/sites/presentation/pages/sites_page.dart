@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../bird_counting/presentation/pages/counting_site_page.dart';
 import '../../data/services/sites_database_service.dart';
+import '../../../../core/database/models/site_model.dart';
+import '../../../../utils/avicast_header.dart';
+import '../../../../utils/theme.dart';
 
 
 class SitesPage extends StatefulWidget {
@@ -9,7 +13,7 @@ class SitesPage extends StatefulWidget {
   State<SitesPage> createState() => _SitesPageState();
 }
 
-class _SitesPageState extends State<SitesPage> {
+class _SitesPageState extends State<SitesPage> with WidgetsBindingObserver {
   final SitesDatabaseService _databaseService = SitesDatabaseService();
   List<Site> _sites = [];
   bool _isLoading = true;
@@ -17,6 +21,28 @@ class _SitesPageState extends State<SitesPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _loadSites();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh sites when app becomes active
+      _loadSites();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh sites when dependencies change (e.g., when returning to this page)
     _loadSites();
   }
 
@@ -206,7 +232,7 @@ class _SitesPageState extends State<SitesPage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50),
+                backgroundColor: AppTheme.successColor,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
@@ -458,7 +484,7 @@ class _SitesPageState extends State<SitesPage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50),
+                backgroundColor: AppTheme.successColor,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
@@ -537,8 +563,8 @@ class _SitesPageState extends State<SitesPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF87CEEB), // Light blue
-              Color(0xFFB0E0E6), // Powder blue
+                      AppTheme.avicastBlue, // Light blue
+        AppTheme.avicastLightBlue, // Powder blue
               Colors.white,
             ],
             stops: [0.0, 0.6, 1.0],
@@ -848,6 +874,7 @@ class _SitesPageState extends State<SitesPage> {
                                                 ],
                                               ),
                                             ),
+                                          
                                         ],
                                       ),
                                     ),

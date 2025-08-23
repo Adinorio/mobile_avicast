@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../utils/avicast_header.dart';
+import '../../../../utils/theme.dart';
 import '../../../sites/data/services/sites_database_service.dart';
 import '../widgets/scrollable_counter.dart';
 import '../../data/services/offline_bird_api_service.dart';
@@ -102,13 +103,13 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
       case 'CR':
         return Colors.red;
       case 'EN':
-        return const Color(0xFFFF8C00); // Dark orange
+        return AppTheme.endangered; // Dark orange
       case 'VU':
-        return const Color(0xFFFFD700); // Gold/yellow
+                  return AppTheme.vulnerable; // Gold/yellow
       case 'NT':
-        return const Color(0xFFFFA500); // Orange
+                  return AppTheme.nearThreatened; // Orange
       case 'LC':
-        return const Color(0xFF90EE90); // Light green
+                  return AppTheme.leastConcern; // Light green
       case 'DD':
         return Colors.grey;
       default:
@@ -307,8 +308,8 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                   
                   Navigator.of(context).pop(); // Close dialog
                   
-                  // Log out and go to login page
-                  Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                  // Go back to the previous page
+                  Navigator.of(context).pop();
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
