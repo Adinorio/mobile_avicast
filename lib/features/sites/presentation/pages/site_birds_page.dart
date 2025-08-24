@@ -240,7 +240,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
         filtered.sort((a, b) => a['family'].compareTo(b['family']));
         break;
     }
-
+    
     return filtered;
   }
 
@@ -319,7 +319,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
             // AVICAST Header
             AvicastHeader(
               pageTitle: '📍 ${widget.siteName}',
-              showPageTitle: true,
+                showPageTitle: true,
             ),
             
             
@@ -341,9 +341,9 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                 children: [
                   // Search bar
                   TextField(
-                    controller: _searchController,
+                        controller: _searchController,
                     onChanged: (value) => setState(() {}),
-                    decoration: InputDecoration(
+                        decoration: InputDecoration(
                       hintText: 'Search by name, scientific name, or family...',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
@@ -373,8 +373,8 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                       Expanded(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
+                      child: Row(
+                        children: [
                               'A - Z',
                               'Z - A',
                               'Status',
@@ -394,12 +394,12 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                                                                   selectedColor: AppTheme.successColor,
                                 labelStyle: TextStyle(
                                   color: _selectedSortOption == option ? Colors.white : Colors.grey[700],
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            )).toList(),
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
+                            )).toList(),
+                      ),
+                    ),
                       ),
                     ],
                   ),
@@ -553,12 +553,12 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                             children: [
                               if (birdCount > 0) ...[
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
                                                                           color: AppTheme.successColor,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                                child: Text(
                                     '$birdCount',
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -570,11 +570,11 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                                 const SizedBox(height: 4),
                                 Text(
                                   lastCountDate,
-                                  style: TextStyle(
-                                    fontSize: 11,
+                                                  style: TextStyle(
+                                                    fontSize: 11,
                                     color: Colors.grey[600],
-                                  ),
-                                ),
+                                                ),
+                                              ),
                               ] else ...[
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -585,7 +585,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                                   child: Text(
                                     '0',
                                     style: TextStyle(
-                                      color: Colors.grey[600],
+                                                color: Colors.grey[600],
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
@@ -597,8 +597,8 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: Colors.grey[500],
-                                  ),
-                                ),
+                                          ),
+                                        ),
                               ],
                             ],
                           ),
@@ -607,12 +607,12 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                     ),
                   );
                 },
-              ),
-            ),
-          ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
         ),
-        ),
-      ),
+                            ),
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -684,11 +684,11 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF2C3E50),
+                            color: Color(0xFF2C3E50),
                       ),
-                    ),
-                  ],
-                ),
+                          ),
+                          ],
+                        ),
                 const SizedBox(height: 16),
                 // Progress steps
                 Row(
@@ -701,12 +701,12 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                     ),
                     Expanded(
                       child: _buildProgressStep('Confirm', 3, false),
-                    ),
+              ),
                   ],
-                ),
-              ],
             ),
-          ),
+          ],
+        ),
+        ),
           
           const Divider(height: 1),
           
@@ -769,16 +769,16 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
-              boxShadow: [
-                BoxShadow(
+          boxShadow: [
+            BoxShadow(
                   color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
+              blurRadius: 10,
                   offset: const Offset(0, -2),
-                ),
-              ],
             ),
-            child: Row(
-              children: [
+          ],
+        ),
+        child: Row(
+          children: [
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () => Navigator.of(context).pop(),
@@ -804,7 +804,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                  ),
+            ),
                 ),
               ],
             ),
@@ -817,12 +817,12 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
   Widget _buildProgressStep(String title, int step, bool isCompleted) {
     return Column(
       children: [
-        Container(
+            Container(
           width: 32,
           height: 32,
-          decoration: BoxDecoration(
+              decoration: BoxDecoration(
             color: isCompleted ? AppTheme.successColor : Colors.grey[300],
-            shape: BoxShape.circle,
+                shape: BoxShape.circle,
           ),
           child: Icon(
             isCompleted ? Icons.check : Icons.circle,
@@ -837,7 +837,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: isCompleted ? AppTheme.successColor : Colors.grey[600],
-          ),
+                ),
         ),
       ],
     );
@@ -865,9 +865,9 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
                   fontWeight: FontWeight.bold,
                   color: color,
                 ),
+                  ),
+                ],
               ),
-            ],
-          ),
           const SizedBox(height: 16),
           ...items,
         ],
@@ -914,7 +914,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
           margin: const EdgeInsets.only(bottom: 8),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
+                color: Colors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.grey[300]!),
           ),
@@ -973,17 +973,17 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
+              onPressed: () {
               Navigator.of(context).pop();
               _showSubmissionSuccess();
-            },
+              },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.successColor,
             ),
             child: const Text('Submit'),
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
     );
   }
 
@@ -1050,12 +1050,12 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
 
   Widget _buildBirdImage(String imagePath) {
     if (imagePath.isNotEmpty) {
-      return Image.asset(
-        imagePath,
-        width: 64,
-        height: 64,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
+    return Image.asset(
+      imagePath,
+      width: 64,
+      height: 64,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
           return _buildPlaceholderImage();
         },
       );
@@ -1065,19 +1065,19 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
   }
 
   Widget _buildPlaceholderImage() {
-    return Container(
-      width: 64,
-      height: 64,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[300]!),
-      ),
-      child: Icon(
-        Icons.photo_camera,
+        return Container(
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: Icon(
+            Icons.photo_camera,
         size: 24,
         color: Colors.grey[600],
-      ),
+          ),
     );
   }
 } 

@@ -11,7 +11,7 @@ class AppTheme {
   static const Color primaryLightColor = Color(0xFF42A5F5);
   static const Color primaryDarkColor = Color(0xFF1565C0);
   
-  // Secondary Colors  
+  // Secondary Colors
   static const Color secondaryColor = Color(0xFF26A69A);
   static const Color secondaryLightColor = Color(0xFF64D8CB);
   static const Color secondaryDarkColor = Color(0xFF00766C);
