@@ -8,9 +8,7 @@ import '../widgets/add_task_dialog.dart';
 import '../pages/camera_page.dart';
 import '../pages/drawing_page.dart';
 import '../pages/file_attachment_page.dart';
-import '../../domain/entities/note.dart';
 import '../../data/services/notes_local_storage_service.dart';
-import '../../data/repositories/notes_repository_impl.dart';
 
 class NotePage extends StatefulWidget {
   const NotePage({super.key});
@@ -29,7 +27,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _notesBloc = NotesBloc(NotesRepositoryImpl(NotesLocalStorageService()));
+    _notesBloc = NotesBloc(NotesLocalStorageService.instance);
     _notesBloc.add(LoadNotes());
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {

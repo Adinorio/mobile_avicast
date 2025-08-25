@@ -14,7 +14,7 @@ class SitesPage extends StatefulWidget {
 }
 
 class _SitesPageState extends State<SitesPage> with WidgetsBindingObserver {
-  final SitesDatabaseService _databaseService = SitesDatabaseService();
+  final SitesDatabaseService _databaseService = SitesDatabaseService.instance;
   List<Site> _sites = [];
   bool _isLoading = true;
 

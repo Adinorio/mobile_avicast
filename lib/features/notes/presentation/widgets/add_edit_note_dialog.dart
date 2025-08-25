@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/note.dart';
+import '../../data/services/notes_local_storage_service.dart';
 
 class AddEditNoteDialog extends StatefulWidget {
   final Note? note; // null for new note, existing note for editing
@@ -289,6 +289,7 @@ class _AddEditNoteDialogState extends State<AddEditNoteDialog> {
         id: widget.note?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
         title: _titleController.text.trim(),
         content: _contentController.text.trim(),
+        type: 'general',
         createdAt: widget.note?.createdAt ?? DateTime.now(),
         updatedAt: DateTime.now(),
         tags: _tags,

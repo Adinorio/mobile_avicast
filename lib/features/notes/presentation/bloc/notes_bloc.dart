@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/note.dart';
-import '../../data/repositories/notes_repository_impl.dart';
+import '../../data/services/notes_local_storage_service.dart';
 
 // Events
 abstract class NotesEvent extends Equatable {
@@ -117,7 +116,7 @@ class NoteOperationSuccess extends NotesState {
 
 // Bloc
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
-  final NotesRepositoryImpl _notesRepository;
+  final NotesLocalStorageService _notesRepository;
 
   NotesBloc(this._notesRepository) : super(NotesInitial()) {
     on<LoadNotes>(_onLoadNotes);
@@ -141,23 +140,21 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   Future<void> _onCreateNote(CreateNote event, Emitter<NotesState> emit) async {
     try {
       emit(NotesLoading());
-      final success = await _notesRepository.createNote(
+      await _notesRepository.createNote(
         title: event.title,
         content: event.content,
+        type: 'general',
         tags: event.tags,
         siteId: event.siteId,
       );
 
-      if (success) {
-        final notes = await _notesRepository.getAllNotes();
-        emit(NoteOperationSuccess(
-          message: 'Note created successfully',
-          notes: notes,
-        ));
-        emit(NotesLoaded(notes: notes));
-      } else {
-        emit(NotesError('Failed to create note'));
-      }
+      // Reload notes after creation
+      final notes = await _notesRepository.getAllNotes();
+      emit(NoteOperationSuccess(
+        message: 'Note created successfully',
+        notes: notes,
+      ));
+      emit(NotesLoaded(notes: notes));
     } catch (e) {
       emit(NotesError('Failed to create note: $e'));
     }
@@ -166,18 +163,15 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   Future<void> _onUpdateNote(UpdateNote event, Emitter<NotesState> emit) async {
     try {
       emit(NotesLoading());
-      final success = await _notesRepository.updateNote(event.note);
+      await _notesRepository.updateNote(event.note);
 
-      if (success) {
-        final notes = await _notesRepository.getAllNotes();
-        emit(NoteOperationSuccess(
-          message: 'Note updated successfully',
-          notes: notes,
-        ));
-        emit(NotesLoaded(notes: notes));
-      } else {
-        emit(NotesError('Failed to update note'));
-      }
+      // Reload notes after update
+      final notes = await _notesRepository.getAllNotes();
+      emit(NoteOperationSuccess(
+        message: 'Note updated successfully',
+        notes: notes,
+      ));
+      emit(NotesLoaded(notes: notes));
     } catch (e) {
       emit(NotesError('Failed to update note: $e'));
     }
@@ -186,18 +180,15 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   Future<void> _onDeleteNote(DeleteNote event, Emitter<NotesState> emit) async {
     try {
       emit(NotesLoading());
-      final success = await _notesRepository.deleteNote(event.noteId);
+      await _notesRepository.deleteNote(event.noteId);
 
-      if (success) {
-        final notes = await _notesRepository.getAllNotes();
-        emit(NoteOperationSuccess(
-          message: 'Note deleted successfully',
-          notes: notes,
-        ));
-        emit(NotesLoaded(notes: notes));
-      } else {
-        emit(NotesError('Failed to delete note'));
-      }
+      // Reload notes after deletion
+      final notes = await _notesRepository.getAllNotes();
+      emit(NoteOperationSuccess(
+        message: 'Note deleted successfully',
+        notes: notes,
+      ));
+      emit(NotesLoaded(notes: notes));
     } catch (e) {
       emit(NotesError('Failed to delete note: $e'));
     }

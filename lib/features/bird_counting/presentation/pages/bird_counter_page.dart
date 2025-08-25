@@ -31,7 +31,7 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
   int _count = 0;
   final TextEditingController _nameController = TextEditingController();
   String? _observerName;
-  final SitesDatabaseService _databaseService = SitesDatabaseService();
+  final SitesDatabaseService _databaseService = SitesDatabaseService.instance;
   final OfflineBirdApiService _birdApiService = OfflineBirdApiService();
   Map<String, dynamic>? _birdInfo;
   
@@ -297,7 +297,7 @@ class _BirdCounterPageState extends State<BirdCounterPage> {
                   );
                   
                   // Save to database
-                  await _databaseService.addBirdCount(currentSite.id, birdCount);
+                  await _databaseService.addBirdCount(birdCount, currentSite.name);
                   
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

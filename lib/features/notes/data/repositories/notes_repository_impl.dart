@@ -1,4 +1,3 @@
-import '../../domain/entities/note.dart';
 import '../services/notes_local_storage_service.dart';
 
 class NotesRepositoryImpl {
@@ -22,44 +21,35 @@ class NotesRepositoryImpl {
   }
   
   // Save note
-  Future<bool> saveNote(Note note) async {
-    return await _localStorageService.saveNote(note);
+  Future<void> saveNote(Note note) async {
+    await _localStorageService.saveNote(note);
   }
   
   // Delete note
-  Future<bool> deleteNote(String noteId) async {
-    return await _localStorageService.deleteNote(noteId);
+  Future<void> deleteNote(String noteId) async {
+    await _localStorageService.deleteNote(noteId);
   }
   
   // Create new note
-  Future<bool> createNote({
+  Future<void> createNote({
     required String title,
     required String content,
+    required String type,
     List<String> tags = const [],
     String? siteId,
   }) async {
-    final note = Note(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+    await _localStorageService.createNote(
       title: title,
       content: content,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      type: type,
       tags: tags,
-      isSynced: false,
       siteId: siteId,
     );
-    
-    return await _localStorageService.saveNote(note);
   }
   
   // Update existing note
-  Future<bool> updateNote(Note note) async {
-    final updatedNote = note.copyWith(
-      updatedAt: DateTime.now(),
-      isSynced: false,
-    );
-    
-    return await _localStorageService.saveNote(updatedNote);
+  Future<void> updateNote(Note note) async {
+    await _localStorageService.updateNote(note);
   }
   
   // Get unsynced notes for future sync
@@ -68,7 +58,7 @@ class NotesRepositoryImpl {
   }
   
   // Mark note as synced (for future API integration)
-  Future<bool> markNoteAsSynced(String noteId) async {
-    return await _localStorageService.markNoteAsSynced(noteId);
+  Future<void> markNoteAsSynced(String noteId) async {
+    await _localStorageService.markNoteAsSynced(noteId);
   }
 } 

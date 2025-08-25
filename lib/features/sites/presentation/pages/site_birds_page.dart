@@ -18,7 +18,7 @@ class SiteBirdsPage extends StatefulWidget {
 class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserver {
   final TextEditingController _searchController = TextEditingController();
   String _selectedSortOption = 'A - Z';
-  final SitesDatabaseService _databaseService = SitesDatabaseService();
+  final SitesDatabaseService _databaseService = SitesDatabaseService.instance;
   List<BirdCount> _savedCounts = [];
   
   // Sample bird data with conservation status and family
@@ -618,6 +618,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
         children: [
           // Refresh button (icon only)
           FloatingActionButton(
+            heroTag: 'refresh_button',
             onPressed: () => _loadSavedCounts(),
             backgroundColor: AppTheme.avicastBlue,
             foregroundColor: AppTheme.textPrimaryColor,
@@ -626,6 +627,7 @@ class _SiteBirdsPageState extends State<SiteBirdsPage> with WidgetsBindingObserv
           const SizedBox(width: 16),
           // View Summary button
           FloatingActionButton.extended(
+            heroTag: 'summary_button',
             onPressed: _showCountsSummary,
             icon: const Icon(Icons.analytics),
             label: const Text('View Summary'),

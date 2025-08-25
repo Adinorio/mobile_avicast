@@ -12,9 +12,9 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'utils/theme.dart';
-import 'core/database/web_storage_service.dart';
 import 'features/sites/data/services/sites_database_service.dart';
 import 'features/notes/data/services/notes_local_storage_service.dart';
+import 'core/services/user_context_service.dart';
 import 'screens/splash_screen.dart';
 
 class App extends StatelessWidget {
@@ -352,27 +352,23 @@ class _MainAppState extends State<MainApp> {
   Future<void> _saveAllSystemData() async {
     try {
       // Get instances of services
-      final webStorageService = WebStorageService.instance;
-      final sitesService = SitesDatabaseService();
-      final notesService = NotesLocalStorageService();
+      final sitesService = SitesDatabaseService.instance;
+      final notesService = NotesLocalStorageService.instance;
 
       // Save sites data
       final sites = await sitesService.getAllSites();
       final sitesData = sites.map((site) => site.toJson()).toList();
-      await webStorageService.saveSites(sitesData);
 
       // Save bird counts data
       List<Map<String, dynamic>> allBirdCounts = [];
       for (final site in sites) {
-        final counts = await sitesService.getBirdCountsForSite(site.id);
+        final counts = await sitesService.getBirdCountsForSite(site.name);
         allBirdCounts.addAll(counts.map((count) => count.toJson()));
       }
-      await webStorageService.saveBirdCounts(allBirdCounts);
 
       // Save notes data
       final notes = await notesService.getAllNotes();
       final notesData = notes.map((note) => note.toJson()).toList();
-      await webStorageService.saveNotes(notesData);
 
       // Save additional data to SharedPreferences for backup
       final prefs = await SharedPreferences.getInstance();

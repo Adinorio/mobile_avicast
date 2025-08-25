@@ -18,7 +18,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw const AuthException('Password must be at least 6 characters');
     }
     
-    // For development: Accept default credentials
+    // Predefined users with unique passwords for development
     if (userId == '24-0925-001' && password == 'password123') {
       return UserModel(
         id: '24-0925-001',
@@ -32,17 +32,34 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
     }
     
-    // Return mock user data for any other valid credentials
-    return UserModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      email: 'user@avicast.org',
-      name: 'User $userId',
-      profilePicture: null,
-      roles: ['user'],
-      createdAt: DateTime.now(),
-      lastLoginAt: null,
-      isActive: true,
-    );
+    if (userId == '24-0925-002' && password == 'password456') {
+      return UserModel(
+        id: '24-0925-002',
+        email: 'observer@avicast.org',
+        name: 'Bird Observer',
+        profilePicture: null,
+        roles: ['observer', 'user'],
+        createdAt: DateTime.now(),
+        lastLoginAt: null,
+        isActive: true,
+      );
+    }
+    
+    if (userId == '24-0925-003' && password == 'password789') {
+      return UserModel(
+        id: '24-0925-003',
+        email: 'analyst@avicast.org',
+        name: 'Data Analyst',
+        profilePicture: null,
+        roles: ['analyst', 'user'],
+        createdAt: DateTime.now(),
+        lastLoginAt: null,
+        isActive: true,
+      );
+    }
+    
+    // If credentials don't match any predefined user, reject login
+    throw const AuthException('Invalid User ID or password. Please check your credentials.');
   }
 
   @override
@@ -58,9 +75,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw const ValidationException('Password must be at least 6 characters');
     }
     
-    // Prevent creating duplicate default user
-    if (userId == '24-0925-001') {
-      throw const ValidationException('This User ID is already taken');
+    // Prevent creating users with predefined IDs
+    if (userId == '24-0925-001' || userId == '24-0925-002' || userId == '24-0925-003') {
+      throw const ValidationException('This User ID is reserved and cannot be used for registration');
     }
     
     return UserModel(

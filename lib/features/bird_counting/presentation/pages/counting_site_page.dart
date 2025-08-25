@@ -256,7 +256,7 @@ class CounterView extends StatefulWidget {
 class _CounterViewState extends State<CounterView> with WidgetsBindingObserver, TickerProviderStateMixin {
   int _count = 0;
   String _counterName = "Unnamed Counter";
-  final SitesDatabaseService _databaseService = SitesDatabaseService();
+  final SitesDatabaseService _databaseService = SitesDatabaseService.instance;
   List<BirdCount> _savedCounts = [];
   bool _isLoading = true;
   
@@ -325,21 +325,34 @@ class _CounterViewState extends State<CounterView> with WidgetsBindingObserver, 
   Future<void> _loadSavedCounts() async {
     try {
       final sites = await _databaseService.getAllSites();
-      final currentSite = sites.firstWhere((site) => site.name == widget.siteName);
+      
+      // Try to find the current site
+      Site? currentSite;
+      try {
+        currentSite = sites.firstWhere((site) => site.name == widget.siteName);
+      } catch (e) {
+        // Site doesn't exist yet, that's okay
+        currentSite = null;
+      }
+      
       setState(() {
-        _savedCounts = currentSite.birdCounts;
-        _isLoading = false;
-        
-        // Automatically restore the last count if available
-        if (_savedCounts.isNotEmpty && _count == 0) {
-          _count = _savedCounts.first.count;
+        if (currentSite != null) {
+          _savedCounts = currentSite.birdCounts;
+          // Automatically restore the last count if available
+          if (_savedCounts.isNotEmpty && _count == 0) {
+            _count = _savedCounts.last.count; // Use last count instead of first
+          }
+        } else {
+          _savedCounts = [];
         }
+        _isLoading = false;
       });
     } catch (e) {
       setState(() {
         _savedCounts = [];
         _isLoading = false;
       });
+      print('Error loading saved counts: $e');
     }
   }
 
@@ -516,7 +529,7 @@ class _CounterViewState extends State<CounterView> with WidgetsBindingObserver, 
                   );
                   
                   // Save to database
-                  await _databaseService.addBirdCount(currentSite.id, birdCount);
+                  await _databaseService.addBirdCount(birdCount, widget.siteName);
                   
                   // Reload saved counts
                   await _loadSavedCounts();

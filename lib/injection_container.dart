@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 // Core
 import 'core/network/network_info.dart';
+import 'core/services/user_context_service.dart';
 
 // Features - Auth
 import 'features/auth/data/datasources/auth_local_data_source.dart';
@@ -42,11 +43,7 @@ Future<void> init() async {
   //! Features - Auth
   // Bloc
   sl.registerFactory(
-    () => AuthBloc(
-      signIn: sl(),
-      signOut: sl(),
-      authRepository: sl(),
-    ),
+    () => AuthBloc(authRepository: sl()),
   );
 
   // Use cases
@@ -83,11 +80,11 @@ Future<void> init() async {
   );
 
   // Services
-  sl.registerLazySingleton(() => NotesLocalStorageService());
+  sl.registerLazySingleton(() => NotesLocalStorageService.instance);
 
   //! Features - Sites
   // Services
-  sl.registerLazySingleton(() => SitesDatabaseService());
+  sl.registerLazySingleton(() => SitesDatabaseService.instance);
   
   //! Core - Database
   // Database service
@@ -112,6 +109,9 @@ Future<void> init() async {
     connectivity: sl(),
     networkInfo: sl(),
   ));
+
+  //! Services
+  sl.registerLazySingleton(() => UserContextService.instance);
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();

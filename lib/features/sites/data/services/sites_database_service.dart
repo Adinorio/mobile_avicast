@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/services/user_context_service.dart';
 
 class Site {
   final String id;
@@ -95,19 +96,39 @@ class SitesDatabaseService {
   static const String _sitesKey = 'counting_sites';
   static const String _countsKey = 'bird_counts';
 
-  // Get all sites
+  static final SitesDatabaseService _instance = SitesDatabaseService._internal();
+  factory SitesDatabaseService() => _instance;
+  SitesDatabaseService._internal();
+
+  static SitesDatabaseService get instance => _instance;
+
+  Future<String> get _sitesKeyForUser async {
+    final userId = await UserContextService.instance.getCurrentUserId();
+    if (userId == null) throw Exception('No user logged in');
+    return '${_sitesKey}_$userId';
+  }
+
+  Future<String> get _countsKeyForUser async {
+    final userId = await UserContextService.instance.getCurrentUserId();
+    if (userId == null) throw Exception('No user logged in');
+    return '${_countsKey}_$userId';
+  }
+
+  // Get all sites for current user
   Future<List<Site>> getAllSites() async {
     final prefs = await SharedPreferences.getInstance();
-    final sitesJson = prefs.getStringList(_sitesKey) ?? [];
+    final sitesKey = await _sitesKeyForUser;
+    final sitesJson = prefs.getStringList(sitesKey) ?? [];
     
     return sitesJson
         .map((json) => Site.fromJson(jsonDecode(json)))
         .toList();
   }
 
-  // Add new site
+  // Add new site for current user
   Future<void> addSite(Site site) async {
     final prefs = await SharedPreferences.getInstance();
+    final sitesKey = await _sitesKeyForUser;
     final sites = await getAllSites();
     sites.add(site);
     
@@ -115,12 +136,13 @@ class SitesDatabaseService {
         .map((site) => jsonEncode(site.toJson()))
         .toList();
     
-    await prefs.setStringList(_sitesKey, sitesJson);
+    await prefs.setStringList(sitesKey, sitesJson);
   }
 
-  // Update site
+  // Update site for current user
   Future<void> updateSite(Site updatedSite) async {
     final prefs = await SharedPreferences.getInstance();
+    final sitesKey = await _sitesKeyForUser;
     final sites = await getAllSites();
     
     final index = sites.indexWhere((site) => site.id == updatedSite.id);
@@ -131,13 +153,14 @@ class SitesDatabaseService {
           .map((site) => jsonEncode(site.toJson()))
           .toList();
       
-      await prefs.setStringList(_sitesKey, sitesJson);
+      await prefs.setStringList(sitesKey, sitesJson);
     }
   }
 
-  // Delete site
+  // Delete site for current user
   Future<void> deleteSite(String siteId) async {
     final prefs = await SharedPreferences.getInstance();
+    final sitesKey = await _sitesKeyForUser;
     final sites = await getAllSites();
     
     sites.removeWhere((site) => site.id == siteId);
@@ -146,38 +169,81 @@ class SitesDatabaseService {
         .map((site) => jsonEncode(site.toJson()))
         .toList();
     
-    await prefs.setStringList(_sitesKey, sitesJson);
+    await prefs.setStringList(sitesKey, sitesJson);
   }
 
-  // Add bird count to a site
-  Future<void> addBirdCount(String siteId, BirdCount count) async {
+  // Add bird count to a site for current user
+  Future<void> addBirdCount(BirdCount count, String siteName) async {
     final sites = await getAllSites();
-    final siteIndex = sites.indexWhere((site) => site.id == siteId);
     
-    if (siteIndex != -1) {
-      final updatedSite = Site(
-        id: sites[siteIndex].id,
-        name: sites[siteIndex].name,
-        createdAt: sites[siteIndex].createdAt,
-        birdCounts: [...sites[siteIndex].birdCounts, count],
+    // Find existing site or create new one
+    Site? existingSite;
+    int siteIndex = -1;
+    
+    for (int i = 0; i < sites.length; i++) {
+      if (sites[i].name == siteName) {
+        existingSite = sites[i];
+        siteIndex = i;
+        break;
+      }
+    }
+    
+    if (existingSite == null) {
+      // Create new site if it doesn't exist
+      final newSite = Site(
+        id: generateSiteId(),
+        name: siteName,
+        description: 'Bird counting site',
+        latitude: null,
+        longitude: null,
+        createdAt: DateTime.now(),
+        birdCounts: [count],
       );
-      
+      sites.add(newSite);
+    } else {
+      // Update existing site with new bird count
+      final updatedSite = Site(
+        id: existingSite.id,
+        name: existingSite.name,
+        description: existingSite.description,
+        latitude: existingSite.latitude,
+        longitude: existingSite.longitude,
+        createdAt: existingSite.createdAt,
+        birdCounts: [...existingSite.birdCounts, count],
+      );
       sites[siteIndex] = updatedSite;
-      
-      final prefs = await SharedPreferences.getInstance();
-      final sitesJson = sites
-          .map((site) => jsonEncode(site.toJson()))
-          .toList();
-      
-      await prefs.setStringList(_sitesKey, sitesJson);
+    }
+    
+    // Save updated sites
+    final prefs = await SharedPreferences.getInstance();
+    final sitesKey = await _sitesKeyForUser;
+    final sitesJson = sites
+        .map((site) => jsonEncode(site.toJson()))
+        .toList();
+    
+    await prefs.setStringList(sitesKey, sitesJson);
+  }
+
+  // Get bird counts for a specific site for current user
+  Future<List<BirdCount>> getBirdCountsForSite(String siteName) async {
+    final sites = await getAllSites();
+    try {
+      final site = sites.firstWhere((site) => site.name == siteName);
+      return site.birdCounts;
+    } catch (e) {
+      // Return empty list if site not found
+      return [];
     }
   }
 
-  // Get bird counts for a specific site
-  Future<List<BirdCount>> getBirdCountsForSite(String siteId) async {
-    final sites = await getAllSites();
-    final site = sites.firstWhere((site) => site.id == siteId);
-    return site.birdCounts;
+  // Clear all data for current user
+  Future<void> clearUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final sitesKey = await _sitesKeyForUser;
+    final countsKey = await _countsKeyForUser;
+    
+    await prefs.remove(sitesKey);
+    await prefs.remove(countsKey);
   }
 
   // Generate unique ID for new sites
